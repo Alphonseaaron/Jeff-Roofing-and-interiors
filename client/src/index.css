@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --background: hsl(210, 20%, 98%);
+  --foreground: hsl(222, 84%, 4.9%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 13.8%, 34.1%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 84%, 4.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 4.9%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(207, 90%, 30%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(39, 95%, 50%);
+  --secondary-foreground: hsl(222, 84%, 4.9%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 84%, 4.9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --success: hsl(142, 76%, 36%);
+  --success-foreground: hsl(355, 7%, 97%);
+  --warning: hsl(39, 95%, 50%);
+  --warning-foreground: hsl(222, 84%, 4.9%);
+  --ring: hsl(222, 84%, 4.9%);
+  --radius: 0.5rem;
+  
+  /* Custom theme colors */
+  --primary-blue: hsl(207, 90%, 30%);
+  --primary-blue-hover: hsl(207, 90%, 25%);
+  --secondary-orange: hsl(39, 95%, 50%);
+  --secondary-orange-hover: hsl(39, 95%, 45%);
+  --text-primary: hsl(215, 25%, 27%);
+  --text-secondary: hsl(215, 16%, 47%);
+  --text-light: hsl(215, 14%, 64%);
+  --success-green: hsl(142, 76%, 36%);
+  --success-green-hover: hsl(142, 76%, 31%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --primary: hsl(207, 90%, 50%);
+  --primary-foreground: hsl(222, 84%, 4.9%);
+  --secondary: hsl(39, 95%, 50%);
+  --secondary-foreground: hsl(222, 84%, 4.9%);
+  --accent: hsl(217, 32%, 17%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(212, 12%, 84%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-inter font-bold;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-blue hover:bg-primary-blue-hover text-white font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-orange hover:bg-secondary-orange-hover text-white font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .btn-success {
+    @apply bg-success-green hover:bg-success-green-hover text-white font-medium py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-light {
+    color: var(--text-light);
+  }
+
+  .bg-primary-blue {
+    background-color: var(--primary-blue);
+  }
+
+  .bg-primary-blue-hover {
+    background-color: var(--primary-blue-hover);
+  }
+
+  .bg-secondary-orange {
+    background-color: var(--secondary-orange);
+  }
+
+  .bg-secondary-orange-hover {
+    background-color: var(--secondary-orange-hover);
+  }
+
+  .bg-success-green {
+    background-color: var(--success-green);
+  }
+
+  .bg-success-green-hover {
+    background-color: var(--success-green-hover);
+  }
+
+  .border-primary-blue {
+    border-color: var(--primary-blue);
+  }
+
+  .border-secondary-orange {
+    border-color: var(--secondary-orange);
+  }
+
+  .text-primary-blue {
+    color: var(--primary-blue);
+  }
+
+  .text-secondary-orange {
+    color: var(--secondary-orange);
+  }
+
+  .text-success-green {
+    color: var(--success-green);
+  }
+
+  .hover\:bg-primary-blue-hover:hover {
+    background-color: var(--primary-blue-hover);
+  }
+
+  .hover\:bg-secondary-orange-hover:hover {
+    background-color: var(--secondary-orange-hover);
+  }
+
+  .hover\:bg-success-green-hover:hover {
+    background-color: var(--success-green-hover);
+  }
+
+  .hover\:text-secondary-orange:hover {
+    color: var(--secondary-orange);
+  }
+}
+
+@layer utilities {
+  .hero-bg {
+    background-image: linear-gradient(rgba(30, 58, 138, 0.7), rgba(30, 58, 138, 0.7)), url('https://images.unsplash.com/photo-1558618047-b1a3f8e6e0d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2;
+  }
+
+  .progress-fill {
+    @apply h-2 rounded-full transition-all duration-300;
+  }
+
+  .status-badge {
+    @apply px-2 py-1 text-xs font-medium rounded-full;
+  }
+
+  .status-pending {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .status-in-progress {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .status-completed {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .status-paid {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .status-due {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .status-overdue {
+    @apply bg-red-100 text-red-800;
+  }
+}
