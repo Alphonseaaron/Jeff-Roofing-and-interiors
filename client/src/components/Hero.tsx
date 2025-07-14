@@ -25,11 +25,11 @@ export function Hero() {
             Get Free Quote
           </Button>
           <Button
-            onClick={() => scrollToSection("portfolio")}
+            onClick={() => scrollToSection("gallery")}
             variant="outline"
             className="border-2 border-white text-white hover:bg-white hover:text-primary-blue px-8 py-4 text-lg font-semibold"
           >
-            View Portfolio
+            View Gallery
           </Button>
         </div>
       </div>

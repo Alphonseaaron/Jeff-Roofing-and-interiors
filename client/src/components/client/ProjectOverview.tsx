@@ -18,7 +18,7 @@ export function ProjectOverview() {
 
   if (error) {
     return (
-      <Card>
+      <Card className="dark:bg-surface-medium dark:border-border">
         <CardContent className="p-6">
           <p className="text-red-600">Error loading projects. Please try again.</p>
         </CardContent>
@@ -28,9 +28,9 @@ export function ProjectOverview() {
 
   if (!projects || projects.length === 0) {
     return (
-      <Card>
+      <Card className="dark:bg-surface-medium dark:border-border">
         <CardContent className="p-6">
-          <p className="text-center text-muted-foreground">No projects found.</p>
+          <p className="text-center text-muted-foreground dark:text-secondary">No projects found.</p>
         </CardContent>
       </Card>
     );
@@ -52,25 +52,25 @@ export function ProjectOverview() {
   };
 
   return (
-    <Card>
+    <Card className="dark:bg-surface-medium dark:border-border">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Current Project: {activeProject.title}</CardTitle>
+          <CardTitle className="dark:text-primary">Current Project: {activeProject.title}</CardTitle>
           {getStatusBadge(activeProject.status)}
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
           <div>
-            <h3 className="font-semibold mb-2">Project Details</h3>
-            <p className="text-muted-foreground">{activeProject.description}</p>
-            <p className="text-sm text-muted-foreground mt-2">
+            <h3 className="font-semibold mb-2 dark:text-primary">Project Details</h3>
+            <p className="text-muted-foreground dark:text-secondary">{activeProject.description}</p>
+            <p className="text-sm text-muted-foreground dark:text-secondary mt-2">
               <strong>Address:</strong> {activeProject.address}
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">Progress</h3>
+            <h3 className="font-semibold mb-2 dark:text-primary">Progress</h3>
             <div className="flex items-center space-x-4">
               <Progress value={activeProject.progress} className="flex-1" />
               <span className="text-sm font-medium">{activeProject.progress}%</span>

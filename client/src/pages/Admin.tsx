@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/admin/Sidebar";
@@ -14,6 +14,11 @@ export function Admin() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+
+  // Admin starts with the landing page for editing
+  useEffect(() => {
+    setLocation("/");
+  }, [setLocation]);
 
   const handleLogout = async () => {
     await logout();
@@ -71,14 +76,14 @@ export function Admin() {
 
   return (
     <ProtectedRoute requiredRole="admin">
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex h-screen bg-gray-100 dark:bg-surface-dark">
         <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
         
         <div className="flex-1 overflow-auto">
           {/* Header */}
-          <div className="bg-white border-b border-gray-200 p-4">
+          <div className="bg-white dark:bg-surface-medium border-b border-gray-200 dark:border-border p-4">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold text-primary">
+              <h1 className="text-2xl font-bold text-primary dark:text-primary">
                 {activeTab === "dashboard" && "Dashboard Overview"}
                 {activeTab === "projects" && "Project Management"}
                 {activeTab === "team" && "Team Management"}
@@ -100,7 +105,7 @@ export function Admin() {
                       {user?.displayName?.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-sm font-medium">{user?.displayName}</span>
+                  <span className="text-sm font-medium dark:text-primary">{user?.displayName}</span>
                   <Button variant="outline" size="sm" onClick={handleLogout}>
                     Logout
                   </Button>

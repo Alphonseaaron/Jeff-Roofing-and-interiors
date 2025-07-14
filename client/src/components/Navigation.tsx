@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { HardHat, Menu, X } from "lucide-react";
+import { HardHat, Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/contexts/ThemeContext";
 import { logout } from "@/lib/auth";
 import { useLocation } from "wouter";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [, setLocation] = useLocation();
 
   const handleLogout = async () => {
@@ -24,11 +26,11 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-primary-blue text-white sticky top-0 z-40">
+    <nav className="bg-primary-blue dark:bg-primary-blue text-white sticky top-0 z-40 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <HardHat className="text-secondary-orange text-2xl mr-3" />
+            <div className="text-secondary-orange text-2xl mr-3 font-bold">J</div>
             <span className="text-xl font-bold">Jeff Roofing & Interiors</span>
           </div>
 
@@ -41,10 +43,10 @@ export function Navigation() {
               Services
             </button>
             <button
-              onClick={() => scrollToSection("portfolio")}
+              onClick={() => scrollToSection("gallery")}
               className="hover:text-secondary-orange transition-colors"
             >
-              Portfolio
+              Gallery
             </button>
             <button
               onClick={() => scrollToSection("testimonials")}
@@ -62,6 +64,14 @@ export function Navigation() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
+            <Button
+              onClick={toggleTheme}
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-primary-blue-hover"
+            >
+              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            </Button>
             {user ? (
               <>
                 <Button
@@ -112,10 +122,10 @@ export function Navigation() {
                 Services
               </button>
               <button
-                onClick={() => scrollToSection("portfolio")}
+                onClick={() => scrollToSection("gallery")}
                 className="block px-3 py-2 text-base font-medium hover:text-secondary-orange"
               >
-                Portfolio
+                Gallery
               </button>
               <button
                 onClick={() => scrollToSection("testimonials")}
@@ -129,6 +139,15 @@ export function Navigation() {
               >
                 Contact
               </button>
+              
+              <Button
+                onClick={toggleTheme}
+                variant="ghost"
+                className="w-full mt-2 text-white hover:bg-primary-blue-hover justify-start"
+              >
+                {theme === 'light' ? <Moon size={20} className="mr-2" /> : <Sun size={20} className="mr-2" />}
+                {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+              </Button>
               
               {user ? (
                 <>

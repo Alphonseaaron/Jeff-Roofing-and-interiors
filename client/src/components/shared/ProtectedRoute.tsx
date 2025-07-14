@@ -18,12 +18,12 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
   }
 
   if (!user) {
-    setLocation("/login");
+    setTimeout(() => setLocation("/login"), 0);
     return null;
   }
 
   if (requiredRole && user.role !== requiredRole) {
-    setLocation("/");
+    setTimeout(() => setLocation("/"), 0);
     return null;
   }
 

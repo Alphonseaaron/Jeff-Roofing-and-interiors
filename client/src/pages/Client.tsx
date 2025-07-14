@@ -29,14 +29,14 @@ export function Client() {
 
   return (
     <ProtectedRoute requiredRole="client">
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-surface-light dark:bg-surface-dark">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-white dark:bg-surface-medium border-b border-gray-200 dark:border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
-                <HardHat className="text-primary-blue text-2xl mr-3" />
-                <span className="text-xl font-bold text-primary">Jeff Roofing & Interiors Client Portal</span>
+                <div className="text-primary-blue text-2xl mr-3 font-bold">J</div>
+                <span className="text-xl font-bold text-primary dark:text-primary">Jeff Roofing & Interiors Client Portal</span>
               </div>
               <div className="flex items-center space-x-4">
                 <Button variant="ghost" size="icon" className="relative">
@@ -51,7 +51,7 @@ export function Client() {
                       {user?.displayName?.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-sm font-medium">{user?.displayName}</span>
+                  <span className="text-sm font-medium dark:text-primary">{user?.displayName}</span>
                   <Button variant="outline" size="sm" onClick={handleLogout}>
                     Logout
                   </Button>
@@ -64,14 +64,14 @@ export function Client() {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-primary mb-2">
+            <h1 className="text-3xl font-bold text-primary dark:text-primary mb-2">
               Welcome back, {user?.displayName?.split(' ')[0]}!
             </h1>
-            <p className="text-secondary">Here's an overview of your current projects</p>
+            <p className="text-secondary dark:text-secondary">Here's an overview of your current projects</p>
           </div>
 
           {!activeProject ? (
-            <Card>
+            <Card className="dark:bg-surface-medium dark:border-border">
               <CardContent className="p-12 text-center">
                 <div className="text-gray-400 mb-4">
                   <HardHat size={64} className="mx-auto" />

@@ -6,26 +6,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/contexts/ThemeContext";
 import { signIn, signUp } from "@/lib/auth";
 import { useLocation } from "wouter";
-import { HardHat } from "lucide-react";
+import { HardHat, Sun, Moon } from "lucide-react";
 import { USER_ROLES } from "@shared/schema";
 
 export function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { theme, toggleTheme } = useTheme();
 
   const [loginData, setLoginData] = useState({
     email: "",
     password: ""
-  });
-
-  const [signupData, setSignupData] = useState({
-    email: "",
-    password: "",
-    displayName: "",
-    role: USER_ROLES.CLIENT
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -50,20 +45,21 @@ export function Login() {
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleConsultation = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      await signUp(signupData.email, signupData.password, signupData.displayName, signupData.role);
+      const displayName = loginData.email.split('@')[0];
+      await signUp(loginData.email, "TempPassword123!", displayName, USER_ROLES.CLIENT);
       toast({
         title: "Account created successfully",
-        description: "Welcome to Jeff Roofing & Interiors!",
+        description: "Welcome to Jeff Roofing & Interiors! We'll contact you soon.",
       });
       setLocation("/");
     } catch (error: any) {
       toast({
-        title: "Signup failed",
+        title: "Request failed",
         description: error.message || "Failed to create account",
         variant: "destructive",
       });
@@ -73,20 +69,29 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-surface-light dark:bg-surface-dark px-4">
+      <Card className="w-full max-w-md dark:bg-surface-medium dark:border-border">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <HardHat className="text-primary-blue text-4xl" />
+          <div className="flex justify-between items-center mb-4">
+            <div></div>
+            <div className="text-primary-blue text-4xl font-bold">J</div>
+            <Button
+              onClick={toggleTheme}
+              variant="ghost"
+              size="icon"
+              className="text-primary dark:text-primary hover:bg-primary/10"
+            >
+              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            </Button>
           </div>
-          <CardTitle className="text-2xl">Jeff Roofing & Interiors</CardTitle>
-          <CardDescription>Access your account or create a new one</CardDescription>
+          <CardTitle className="text-2xl dark:text-primary">Jeff Roofing & Interiors</CardTitle>
+          <CardDescription className="dark:text-secondary">Access your account or create a new one</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="consultation">Free Consultation</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
@@ -122,59 +127,28 @@ export function Login() {
               </form>
             </TabsContent>
             
-            <TabsContent value="signup">
-              <form onSubmit={handleSignup} className="space-y-4">
+            <TabsContent value="consultation">
+              <form onSubmit={handleConsultation} className="space-y-4">
                 <div>
-                  <Label htmlFor="displayName">Full Name</Label>
+                  <Label htmlFor="consultation-email">Email</Label>
                   <Input
-                    id="displayName"
-                    type="text"
-                    placeholder="John Doe"
-                    value={signupData.displayName}
-                    onChange={(e) => setSignupData({ ...signupData, displayName: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
+                    id="consultation-email"
                     type="email"
                     placeholder="your@email.com"
-                    value={signupData.email}
-                    onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                    value={loginData.email}
+                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                     required
                   />
                 </div>
-                <div>
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={signupData.password}
-                    onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="role">Account Type</Label>
-                  <Select value={signupData.role} onValueChange={(value: any) => setSignupData({ ...signupData, role: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select account type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={USER_ROLES.CLIENT}>Client</SelectItem>
-                      <SelectItem value={USER_ROLES.TEAM_LEADER}>Team Leader</SelectItem>
-                      <SelectItem value={USER_ROLES.ADMIN}>Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+                  <p>We'll create your account and send you a message to get started with your free consultation.</p>
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-primary-blue hover:bg-primary-blue-hover"
+                  className="w-full bg-secondary-orange hover:bg-secondary-orange-hover"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Creating account..." : "Create Account"}
+                  {isLoading ? "Setting up consultation..." : "Request Free Consultation"}
                 </Button>
               </form>
             </TabsContent>
