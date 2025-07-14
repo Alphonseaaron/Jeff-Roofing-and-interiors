@@ -1,0 +1,81 @@
+DESIGN SPECIFICATIONS
+Color Palette:
+Primary: Deep Blue (#1e3a8a)
+Secondary: Warm Orange (#f59e0b)
+Accent: Light Gray (#f8fafc)
+Text: Dark Gray (#374151)
+Success: Green (#10b981)
+Warning: Amber (#f59e0b)
+Typography:
+Headers: Inter, bold weights
+Body: Inter, regular weights
+Buttons: Inter, medium weight
+Layout:
+Clean, modern design with plenty of white space
+Card-based layouts for content sections
+Responsive grid system
+Smooth transitions and hover effects
+Professional imagery placeholders
+SPECIFIC COMPONENTS NEEDED
+1. Landing Page Components:
+Hero section with background image
+Services grid with icons and descriptions
+Portfolio gallery with lightbox
+Testimonials carousel
+Contact form with messaging integration
+Footer with company information
+2. Admin Dashboard Components:
+Sidebar navigation
+Dashboard overview with metrics
+Project management table
+Team assignment modal
+Progress tracking charts
+Client communication panel
+Stage management interface
+3. Client Portal Components:
+Project overview cards
+Progress timeline
+Photo galleries
+Payment tracker
+Message interface
+Approval buttons for stages
+4. Shared Components:
+Navigation bars
+Loading states
+Notification system
+Modal dialogs
+Form components
+Chat interface
+FUNCTIONALITY REQUIREMENTS
+Authentication:
+Firebase Auth integration
+Role-based access control
+Protected routes
+Password reset functionality
+Real-time Features:
+Live messaging
+Progress updates
+Notifications
+Project status changes
+File Management:
+Image upload for project stages
+Document attachments
+Photo galleries
+File previews
+Payment Integration:
+Stage-based payment tracking
+Payment history
+Invoice generation
+Payment status updates
+DEPLOYMENT PREPARATION
+Firebase Configuration:
+Include Firebase config setup
+Environment variables for API keys
+Security rules for Firestore
+Storage rules for file uploads
+Build Configuration:
+Optimized for production deployment
+Code splitting for better performance
+Image optimization
+SEO-friendly structure
+Create this as a complete, production-ready application with all components, pages, and Firebase integration included. Make sure all features are fully functional and the design is professional and modern.
