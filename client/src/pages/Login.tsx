@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { signIn, signUp, getUserProfile } from "@/lib/auth";
@@ -13,6 +13,7 @@ import { USER_ROLES } from "@shared/schema";
 
 export function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("login");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { theme, toggleTheme } = useTheme();
@@ -136,37 +137,38 @@ export function Login() {
           <CardHeader className="text-center">
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList 
-                className="grid w-full grid-cols-2 mb-6" 
-                style={{ backgroundColor: '#1F1F1F', borderColor: '#333333' }}
+            <div className="w-full">
+              <div 
+                className="grid w-full grid-cols-2 mb-6 rounded-lg p-1" 
+                style={{ backgroundColor: '#1F1F1F', border: '1px solid #333333' }}
               >
-                <TabsTrigger 
-                  value="login" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("login")}
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 py-2 px-4 rounded"
                   style={{
-                    backgroundColor: 'transparent',
-                    color: '#FFFFFF',
+                    backgroundColor: activeTab === "login" ? '#333333' : 'transparent',
+                    color: activeTab === "login" ? '#FFFFFF' : '#A1A1A1',
                     border: 'none'
                   }}
-                  data-state="active"
                 >
                   LOGIN
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="signup" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("signup")}
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 py-2 px-4 rounded"
                   style={{
-                    backgroundColor: 'transparent',
-                    color: '#A1A1A1',
+                    backgroundColor: activeTab === "signup" ? '#333333' : 'transparent',
+                    color: activeTab === "signup" ? '#FFFFFF' : '#A1A1A1',
                     border: 'none'
                   }}
                 >
                   REGISTER
-                </TabsTrigger>
-              </TabsList>
+                </button>
+              </div>
               
-              <TabsContent value="login">
+              {activeTab === "login" && (
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
                     <Label htmlFor="email" className="text-white font-semibold uppercase tracking-wider">EMAIL</Label>
@@ -213,9 +215,9 @@ export function Login() {
                     {isLoading ? "AUTHENTICATING..." : "SIGN IN"}
                   </Button>
                 </form>
-              </TabsContent>
+              )}
               
-              <TabsContent value="signup">
+              {activeTab === "signup" && (
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div>
                     <Label htmlFor="signup-name" className="text-white font-semibold uppercase tracking-wider">NAME</Label>
@@ -285,8 +287,8 @@ export function Login() {
                     {isLoading ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
                   </Button>
                 </form>
-              </TabsContent>
-            </Tabs>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>
