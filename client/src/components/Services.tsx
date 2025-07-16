@@ -1,3 +1,4 @@
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Home, Building, Paintbrush, Check } from "lucide-react";
 
 const services = [
@@ -34,10 +35,16 @@ const services = [
 ];
 
 export function Services() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
+
   return (
     <section id="services" className="py-20" style={{ backgroundColor: '#111111' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 animate-fade-up ${headerVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-wider text-white">
             CORE SERVICES
           </h2>
@@ -46,12 +53,15 @@ export function Services() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div 
+          ref={gridRef}
+          className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-up-delay ${gridVisible ? 'visible' : ''}`}
+        >
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="p-8 transition-all duration-200 group"
-              style={{ backgroundColor: '#222222' }}
+              className="p-8 transition-all duration-300 group hover:scale-105"
+              style={{ backgroundColor: '#222222', borderRadius: '8px' }}
             >
               <div 
                 className="w-16 h-16 flex items-center justify-center mb-6 transition-colors duration-200"

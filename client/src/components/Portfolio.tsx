@@ -1,3 +1,4 @@
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import image1 from "@assets/1.1_1752664761830.jpg";
 import image2 from "@assets/1.2_1752664761845.jpg";
 import image3 from "@assets/1.3_1752664761845.jpg";
@@ -17,10 +18,16 @@ const portfolioImages = [
 ];
 
 export function Portfolio() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
+
   return (
     <section id="gallery" className="py-20" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 animate-fade-up ${headerVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-wider text-white">
             PROJECT PORTFOLIO
           </h2>
@@ -29,12 +36,15 @@ export function Portfolio() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div 
+          ref={gridRef}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-up-delay ${gridVisible ? 'visible' : ''}`}
+        >
           {portfolioImages.map((image, index) => (
             <div
               key={index}
-              className="relative overflow-hidden transition-transform duration-300 hover:scale-103"
-              style={{ aspectRatio: '16/9' }}
+              className="relative overflow-hidden transition-transform duration-300 hover:scale-105"
+              style={{ aspectRatio: '16/9', borderRadius: '8px' }}
             >
               <img
                 src={image}

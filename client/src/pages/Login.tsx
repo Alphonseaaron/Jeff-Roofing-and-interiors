@@ -4,12 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { signIn, signUp } from "@/lib/auth";
 import { useLocation } from "wouter";
-import { HardHat, Sun, Moon } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { USER_ROLES } from "@shared/schema";
 
 export function Login() {
@@ -23,6 +22,13 @@ export function Login() {
     password: ""
   });
 
+  const [signupData, setSignupData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -30,13 +36,13 @@ export function Login() {
     try {
       await signIn(loginData.email, loginData.password);
       toast({
-        title: "Login successful",
-        description: "Welcome back!",
+        title: "Access Granted",
+        description: "Welcome to the system",
       });
       setLocation("/");
     } catch (error: any) {
       toast({
-        title: "Login failed",
+        title: "Access Denied",
         description: error.message || "Invalid credentials",
         variant: "destructive",
       });
@@ -45,21 +51,29 @@ export function Login() {
     }
   };
 
-  const handleConsultation = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (signupData.password !== signupData.confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
-      const displayName = loginData.email.split('@')[0];
-      await signUp(loginData.email, "TempPassword123!", displayName, USER_ROLES.CLIENT);
+      await signUp(signupData.email, signupData.password, signupData.name, USER_ROLES.CLIENT);
       toast({
-        title: "Account created successfully",
-        description: "Welcome to Jeff Roofing & Interiors! We'll contact you soon.",
+        title: "Account Created",
+        description: "Welcome to Jeff Roofing & Interiors",
       });
       setLocation("/");
     } catch (error: any) {
       toast({
-        title: "Request failed",
+        title: "Registration Failed",
         description: error.message || "Failed to create account",
         variant: "destructive",
       });
@@ -69,92 +83,216 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface-light dark:bg-surface-dark px-4">
-      <Card className="w-full max-w-md dark:bg-surface-medium dark:border-border">
-        <CardHeader className="text-center">
-          <div className="flex justify-between items-center mb-4">
-            <div></div>
-            <div className="text-primary-blue text-4xl font-bold">J</div>
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#000000' }}>
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="flex justify-center items-center mb-6">
+            <div className="text-4xl mr-4 font-bold" style={{ color: '#3399FF' }}>J</div>
+            <h1 className="text-2xl font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</h1>
+          </div>
+          <div className="flex justify-end mb-4">
             <Button
               onClick={toggleTheme}
               variant="ghost"
               size="icon"
-              className="text-primary dark:text-primary hover:bg-primary/10"
+              className="transition-colors duration-200"
+              style={{ color: '#A1A1A1' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </Button>
           </div>
-          <CardTitle className="text-2xl dark:text-primary">Jeff Roofing & Interiors</CardTitle>
-          <CardDescription className="dark:text-secondary">Access your account or create a new one</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="consultation">Free Consultation</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                    required
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full bg-primary-blue hover:bg-primary-blue-hover"
-                  disabled={isLoading}
+        </div>
+
+        <Card style={{ backgroundColor: '#111111', borderColor: '#333333' }}>
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl font-bold uppercase tracking-wider text-white">SYSTEM ACCESS</CardTitle>
+            <CardDescription style={{ color: '#A1A1A1' }}>AUTHENTICATE TO CONTINUE</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="login" className="w-full">
+              <TabsList 
+                className="grid w-full grid-cols-2 mb-6" 
+                style={{ backgroundColor: '#222222', borderColor: '#333333' }}
+              >
+                <TabsTrigger 
+                  value="login" 
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                  style={{ 
+                    color: '#A1A1A1',
+                    backgroundColor: 'transparent',
+                  }}
+                  data-state="active"
                 >
-                  {isLoading ? "Signing in..." : "Sign In"}
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="consultation">
-              <form onSubmit={handleConsultation} className="space-y-4">
-                <div>
-                  <Label htmlFor="consultation-email">Email</Label>
-                  <Input
-                    id="consultation-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
-                  <p>We'll create your account and send you a message to get started with your free consultation.</p>
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full bg-secondary-orange hover:bg-secondary-orange-hover"
-                  disabled={isLoading}
+                  LOGIN
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="signup" 
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                  style={{ 
+                    color: '#A1A1A1',
+                    backgroundColor: 'transparent',
+                  }}
                 >
-                  {isLoading ? "Setting up consultation..." : "Request Free Consultation"}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+                  REGISTER
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="login">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div>
+                    <Label htmlFor="email" className="text-white font-semibold uppercase tracking-wider">EMAIL</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                      required
+                      className="mt-2"
+                      style={{ 
+                        backgroundColor: '#222222', 
+                        borderColor: '#333333', 
+                        color: '#FFFFFF'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="password" className="text-white font-semibold uppercase tracking-wider">PASSWORD</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={loginData.password}
+                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                      required
+                      className="mt-2"
+                      style={{ 
+                        backgroundColor: '#222222', 
+                        borderColor: '#333333', 
+                        color: '#FFFFFF'
+                      }}
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full font-semibold uppercase tracking-wider transition-all duration-300"
+                    disabled={isLoading}
+                    style={{ 
+                      backgroundColor: '#3399FF', 
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '8px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#5FB8FF';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#3399FF';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    {isLoading ? "AUTHENTICATING..." : "SIGN IN"}
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="signup">
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div>
+                    <Label htmlFor="signup-name" className="text-white font-semibold uppercase tracking-wider">NAME</Label>
+                    <Input
+                      id="signup-name"
+                      type="text"
+                      placeholder="Your full name"
+                      value={signupData.name}
+                      onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
+                      required
+                      className="mt-2"
+                      style={{ 
+                        backgroundColor: '#222222', 
+                        borderColor: '#333333', 
+                        color: '#FFFFFF'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-email" className="text-white font-semibold uppercase tracking-wider">EMAIL</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={signupData.email}
+                      onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                      required
+                      className="mt-2"
+                      style={{ 
+                        backgroundColor: '#222222', 
+                        borderColor: '#333333', 
+                        color: '#FFFFFF'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-password" className="text-white font-semibold uppercase tracking-wider">PASSWORD</Label>
+                    <Input
+                      id="signup-password"
+                      type="password"
+                      value={signupData.password}
+                      onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                      required
+                      className="mt-2"
+                      style={{ 
+                        backgroundColor: '#222222', 
+                        borderColor: '#333333', 
+                        color: '#FFFFFF'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirm-password" className="text-white font-semibold uppercase tracking-wider">CONFIRM PASSWORD</Label>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      value={signupData.confirmPassword}
+                      onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
+                      required
+                      className="mt-2"
+                      style={{ 
+                        backgroundColor: '#222222', 
+                        borderColor: '#333333', 
+                        color: '#FFFFFF'
+                      }}
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full font-semibold uppercase tracking-wider transition-all duration-300"
+                    disabled={isLoading}
+                    style={{ 
+                      backgroundColor: '#3399FF', 
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '8px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#5FB8FF';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#3399FF';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    {isLoading ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,9 @@ import { sendMessage } from "@/lib/firestore";
 import { USER_ROLES } from "@shared/schema";
 
 export function ContactForm() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: formRef, isVisible: formVisible } = useScrollAnimation();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -69,7 +73,10 @@ export function ContactForm() {
   return (
     <section id="contact" className="py-20" style={{ backgroundColor: '#111111' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 animate-fade-up ${headerVisible ? 'visible' : ''}`}
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-wider text-white">
             INITIATE PROJECT
           </h2>
@@ -78,83 +85,127 @@ export function ContactForm() {
           </p>
         </div>
         
-        <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="bg-card border border-border p-8 rounded-lg">
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+        <div 
+          ref={formRef}
+          className={`max-w-2xl mx-auto animate-fade-up-delay ${formVisible ? 'visible' : ''}`}
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="name" className="text-foreground font-semibold mb-2 uppercase tracking-wide">Full Name</Label>
+                <Label htmlFor="name" className="text-white font-semibold uppercase tracking-wider">NAME</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="John Doe"
                   value={formData.name}
                   onChange={(e) => handleChange("name", e.target.value)}
                   required
-                  className="dark:bg-surface-dark dark:border-border"
+                  className="mt-2"
+                  style={{ 
+                    backgroundColor: '#111111', 
+                    borderColor: '#333333', 
+                    color: '#FFFFFF'
+                  }}
                 />
               </div>
               <div>
-                <Label htmlFor="email" className="text-primary dark:text-primary font-medium mb-2">Email Address</Label>
+                <Label htmlFor="email" className="text-white font-semibold uppercase tracking-wider">EMAIL</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="john@example.com"
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                   required
-                  className="dark:bg-surface-dark dark:border-border"
+                  className="mt-2"
+                  style={{ 
+                    backgroundColor: '#111111', 
+                    borderColor: '#333333', 
+                    color: '#FFFFFF'
+                  }}
                 />
               </div>
             </div>
-            
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+
+            <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="phone" className="text-primary dark:text-primary font-medium mb-2">Phone Number</Label>
+                <Label htmlFor="phone" className="text-white font-semibold uppercase tracking-wider">PHONE</Label>
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="(555) 123-4567"
                   value={formData.phone}
                   onChange={(e) => handleChange("phone", e.target.value)}
-                  className="dark:bg-surface-dark dark:border-border"
+                  required
+                  className="mt-2"
+                  style={{ 
+                    backgroundColor: '#111111', 
+                    borderColor: '#333333', 
+                    color: '#FFFFFF'
+                  }}
                 />
               </div>
               <div>
-                <Label htmlFor="service" className="text-primary dark:text-primary font-medium mb-2">Service Type</Label>
+                <Label htmlFor="service" className="text-white font-semibold uppercase tracking-wider">SERVICE</Label>
                 <Select value={formData.service} onValueChange={(value) => handleChange("service", value)}>
-                  <SelectTrigger className="dark:bg-surface-dark dark:border-border">
-                    <SelectValue placeholder="Select Service" />
+                  <SelectTrigger 
+                    className="mt-2"
+                    style={{ 
+                      backgroundColor: '#111111', 
+                      borderColor: '#333333', 
+                      color: '#FFFFFF'
+                    }}
+                  >
+                    <SelectValue placeholder="Select a service" style={{ color: '#A1A1A1' }} />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="residential-roofing">Residential Roofing</SelectItem>
-                    <SelectItem value="commercial-construction">Commercial Construction</SelectItem>
-                    <SelectItem value="interior-design">Interior Design</SelectItem>
-                    <SelectItem value="repairs-maintenance">Repairs & Maintenance</SelectItem>
+                  <SelectContent style={{ backgroundColor: '#111111', borderColor: '#333333' }}>
+                    <SelectItem value="roofing" style={{ color: '#FFFFFF' }}>ROOFING</SelectItem>
+                    <SelectItem value="commercial" style={{ color: '#FFFFFF' }}>COMMERCIAL CONSTRUCTION</SelectItem>
+                    <SelectItem value="interior" style={{ color: '#FFFFFF' }}>INTERIOR DESIGN</SelectItem>
+                    <SelectItem value="maintenance" style={{ color: '#FFFFFF' }}>REPAIRS & MAINTENANCE</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
-            
-            <div className="mb-6">
-              <Label htmlFor="message" className="text-primary dark:text-primary font-medium mb-2">Project Details</Label>
+
+            <div>
+              <Label htmlFor="message" className="text-white font-semibold uppercase tracking-wider">PROJECT DETAILS</Label>
               <Textarea
                 id="message"
-                rows={4}
-                placeholder="Tell us about your project..."
                 value={formData.message}
                 onChange={(e) => handleChange("message", e.target.value)}
                 required
-                className="dark:bg-surface-dark dark:border-border"
+                rows={4}
+                className="mt-2"
+                style={{ 
+                  backgroundColor: '#111111', 
+                  borderColor: '#333333', 
+                  color: '#FFFFFF'
+                }}
+                placeholder="Describe your project requirements..."
               />
             </div>
-            
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-primary-blue hover:bg-primary-blue-hover text-white font-semibold py-3 px-6"
-            >
-              {isSubmitting ? "Creating Account & Sending..." : "Request Free Consultation"}
-            </Button>
+
+            <div className="text-center">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-12 py-4 text-lg font-semibold uppercase tracking-wider transition-all duration-300"
+                style={{ 
+                  backgroundColor: '#3399FF', 
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '8px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#5FB8FF';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3399FF';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                {isSubmitting ? "SENDING..." : "SEND REQUEST"}
+              </Button>
+            </div>
           </form>
         </div>
       </div>
