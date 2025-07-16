@@ -119,7 +119,7 @@ export function Login() {
               size="icon"
               className="transition-colors duration-200"
               style={{ color: '#A1A1A1' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
               onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
@@ -129,8 +129,6 @@ export function Login() {
 
         <Card style={{ backgroundColor: '#111111', borderColor: '#333333' }}>
           <CardHeader className="text-center">
-            <CardTitle className="text-xl font-bold uppercase tracking-wider text-white">SYSTEM ACCESS</CardTitle>
-            <CardDescription style={{ color: '#A1A1A1' }}>AUTHENTICATE TO CONTINUE</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
@@ -140,20 +138,17 @@ export function Login() {
               >
                 <TabsTrigger 
                   value="login" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=inactive]:text-gray-400"
                   style={{ 
-                    color: '#A1A1A1',
                     backgroundColor: 'transparent',
                   }}
-                  data-state="active"
                 >
                   LOGIN
                 </TabsTrigger>
                 <TabsTrigger 
                   value="signup" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=inactive]:text-gray-400"
                   style={{ 
-                    color: '#A1A1A1',
                     backgroundColor: 'transparent',
                   }}
                 >
