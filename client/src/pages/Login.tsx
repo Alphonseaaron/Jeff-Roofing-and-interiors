@@ -138,17 +138,29 @@ export function Login() {
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList 
-                className="grid w-full grid-cols-2 mb-6 bg-gray-800 border-gray-600" 
+                className="grid w-full grid-cols-2 mb-6" 
+                style={{ backgroundColor: '#1F1F1F', borderColor: '#333333' }}
               >
                 <TabsTrigger 
                   value="login" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=active]:bg-gray-700 data-[state=inactive]:text-gray-400"
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                  style={{
+                    backgroundColor: 'transparent',
+                    color: '#FFFFFF',
+                    border: 'none'
+                  }}
+                  data-state="active"
                 >
                   LOGIN
                 </TabsTrigger>
                 <TabsTrigger 
                   value="signup" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=active]:bg-gray-700 data-[state=inactive]:text-gray-400"
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200"
+                  style={{
+                    backgroundColor: 'transparent',
+                    color: '#A1A1A1',
+                    border: 'none'
+                  }}
                 >
                   REGISTER
                 </TabsTrigger>
@@ -165,7 +177,7 @@ export function Login() {
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       required
-                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400"
                     />
                   </div>
                   <div>
@@ -176,7 +188,7 @@ export function Login() {
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       required
-                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400"
                     />
                   </div>
                   <Button 
@@ -214,7 +226,7 @@ export function Login() {
                       value={signupData.name}
                       onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
                       required
-                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400"
                     />
                   </div>
                   <div>
@@ -226,7 +238,7 @@ export function Login() {
                       value={signupData.email}
                       onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
                       required
-                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400"
                     />
                   </div>
                   <div>
@@ -237,7 +249,7 @@ export function Login() {
                       value={signupData.password}
                       onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                       required
-                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400"
                     />
                   </div>
                   <div>
@@ -248,7 +260,7 @@ export function Login() {
                       value={signupData.confirmPassword}
                       onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
                       required
-                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400"
                     />
                   </div>
                   <Button 
