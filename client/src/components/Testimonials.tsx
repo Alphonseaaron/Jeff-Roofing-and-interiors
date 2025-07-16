@@ -29,33 +29,33 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="py-20 bg-white dark:bg-background">
+    <section id="testimonials" className="py-20 bg-background-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-primary dark:text-primary mb-4">What Our Clients Say</h2>
-          <p className="text-xl text-secondary dark:text-secondary">Real feedback from satisfied customers</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 uppercase tracking-wide">What Our Clients Say</h2>
+          <p className="text-lg text-muted-foreground font-medium">Real feedback from satisfied customers</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-gray-50 p-8 rounded-xl">
+            <div key={testimonial.id} className="bg-card border border-border p-8 rounded-lg hover:border-primary transition-all duration-200">
               <div className="flex items-center mb-4">
-                <div className="flex text-secondary-orange">
+                <div className="flex text-primary">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} size={20} fill="currentColor" />
                   ))}
                 </div>
               </div>
-              <p className="text-secondary mb-6 italic">
+              <p className="text-muted-foreground mb-6 font-medium italic">
                 "{testimonial.content}"
               </p>
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center mr-4">
-                  <span className="text-white font-semibold">{testimonial.avatar}</span>
+                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mr-4">
+                  <span className="text-foreground font-bold">{testimonial.avatar}</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-primary">{testimonial.name}</h4>
-                  <p className="text-light">{testimonial.role}</p>
+                  <h4 className="font-bold text-foreground uppercase tracking-wide">{testimonial.name}</h4>
+                  <p className="text-muted-foreground font-medium">{testimonial.role}</p>
                 </div>
               </div>
             </div>

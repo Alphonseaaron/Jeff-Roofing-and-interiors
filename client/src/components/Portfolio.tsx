@@ -71,33 +71,33 @@ export function Portfolio() {
   };
 
   return (
-    <section id="gallery" className="py-20 bg-surface-light dark:bg-surface-dark">
+    <section id="gallery" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-primary dark:text-primary mb-4">Project Gallery</h2>
-          <p className="text-xl text-secondary dark:text-secondary">Explore our recent work and craftsmanship</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 uppercase tracking-wide">Project Gallery</h2>
+          <p className="text-lg text-muted-foreground font-medium">Explore our recent work and craftsmanship</p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {portfolioItems.map((item, index) => (
-            <div key={item.id} className="group cursor-pointer card-hover">
-              <div className="relative overflow-hidden rounded-xl shadow-lg">
+            <div key={item.id} className="group cursor-pointer">
+              <div className="relative overflow-hidden rounded-lg border border-border hover:border-primary transition-all duration-200">
                 <img
                   src={item.imageUrl}
                   alt={item.title}
-                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center">
                   <button
                     onClick={() => openLightbox(index)}
-                    className="text-white text-2xl transform scale-90 group-hover:scale-100 transition-transform duration-300 bg-white/20 backdrop-blur-sm rounded-full p-4 hover:bg-white/30"
+                    className="text-foreground transform scale-90 group-hover:scale-100 transition-transform duration-200 bg-card border border-border rounded-lg p-4 hover:bg-accent"
                   >
-                    <Expand size={32} />
+                    <Expand size={24} />
                   </button>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
-                  <p className="text-sm opacity-90">{item.description}</p>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background/90 to-transparent">
+                  <h3 className="text-lg font-bold text-foreground mb-1 uppercase tracking-wide">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground font-medium">{item.description}</p>
                 </div>
               </div>
             </div>
