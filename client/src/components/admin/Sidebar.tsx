@@ -1,21 +1,30 @@
 import { HardHat, LayoutDashboard, FolderOpen, Users, UserCircle, CreditCard, MessageSquare, Bell } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { DASHBOARD_FEATURES, DashboardFeature, USER_ROLES } from "@shared/schema";
 
 interface SidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  userPermissions?: DashboardFeature[];
 }
 
-const menuItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "projects", label: "Projects", icon: FolderOpen },
-  { id: "team", label: "Team Management", icon: Users },
-  { id: "clients", label: "Clients", icon: UserCircle },
-  { id: "payments", label: "Payments", icon: CreditCard },
-  { id: "messages", label: "Messages", icon: MessageSquare },
-  { id: "notifications", label: "Notifications", icon: Bell },
+const allMenuItems = [
+  { id: DASHBOARD_FEATURES.DASHBOARD, label: "Dashboard", icon: LayoutDashboard },
+  { id: DASHBOARD_FEATURES.PROJECTS, label: "Projects", icon: FolderOpen },
+  { id: DASHBOARD_FEATURES.TEAM, label: "Team Management", icon: Users },
+  { id: DASHBOARD_FEATURES.CLIENTS, label: "Clients", icon: UserCircle },
+  { id: DASHBOARD_FEATURES.PAYMENTS, label: "Payments", icon: CreditCard },
+  { id: DASHBOARD_FEATURES.MESSAGES, label: "Messages", icon: MessageSquare },
+  { id: DASHBOARD_FEATURES.NOTIFICATIONS, label: "Notifications", icon: Bell },
 ];
 
-export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+export function Sidebar({ activeTab, onTabChange, userPermissions }: SidebarProps) {
+  const { user } = useAuth();
+  
+  // Admins see all features, others see only their permitted features
+  const menuItems = user?.role === USER_ROLES.ADMIN 
+    ? allMenuItems 
+    : allMenuItems.filter(item => userPermissions?.includes(item.id));
   return (
     <div className="w-64 flex-shrink-0 h-screen" style={{ backgroundColor: '#000000', borderRight: '1px solid #333333' }}>
       <div className="p-4">

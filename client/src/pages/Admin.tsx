@@ -74,7 +74,7 @@ export function Admin() {
   return (
     <ProtectedRoute requiredRole="admin">
       <div className="flex h-screen" style={{ backgroundColor: '#000000' }}>
-        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} userPermissions={undefined} />
         
         <div className="flex-1 overflow-auto">
           {/* Header */}

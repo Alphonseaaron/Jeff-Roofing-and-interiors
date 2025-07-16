@@ -113,12 +113,34 @@ export const insertPhotoSchema = photoSchema.omit({ id: true, uploadedAt: true }
 export type Photo = z.infer<typeof photoSchema>;
 export type InsertPhoto = z.infer<typeof insertPhotoSchema>;
 
+// Dashboard permissions
+export const DASHBOARD_FEATURES = {
+  DASHBOARD: 'dashboard',
+  PROJECTS: 'projects',
+  TEAM: 'team',
+  CLIENTS: 'clients',
+  PAYMENTS: 'payments',
+  MESSAGES: 'messages',
+  NOTIFICATIONS: 'notifications'
+} as const;
+
+export type DashboardFeature = typeof DASHBOARD_FEATURES[keyof typeof DASHBOARD_FEATURES];
+
 // Team member schema
 export const teamMemberSchema = z.object({
   id: z.string(),
   projectId: z.string(),
   userId: z.string(),
   role: z.string(),
+  permissions: z.array(z.enum([
+    DASHBOARD_FEATURES.DASHBOARD,
+    DASHBOARD_FEATURES.PROJECTS,
+    DASHBOARD_FEATURES.TEAM,
+    DASHBOARD_FEATURES.CLIENTS,
+    DASHBOARD_FEATURES.PAYMENTS,
+    DASHBOARD_FEATURES.MESSAGES,
+    DASHBOARD_FEATURES.NOTIFICATIONS
+  ])).default([DASHBOARD_FEATURES.DASHBOARD, DASHBOARD_FEATURES.PROJECTS]),
   assignedAt: z.date()
 });
 
