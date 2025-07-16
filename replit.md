@@ -261,3 +261,20 @@ The architecture emphasizes real-time collaboration, role-based access control, 
 - ✓ All dashboards (admin and client) work seamlessly on mobile devices
 - ✓ Responsive grid systems adapt content for optimal viewing on any screen size
 - ✓ Maintained Starlink design aesthetic while ensuring accessibility across devices
+
+### Business Information Updates (January 17, 2025)
+- ✓ Updated business location to Kenya
+- ✓ Changed phone numbers to +254721752466 / +254733386713
+- ✓ Added TikTok (@engineerjeff) and Facebook (@jeffroofinginteriors) social media links
+- ✓ Removed unused social media platforms (Twitter, LinkedIn, Instagram)
+- ✓ Updated company messaging to "BESPOKE ROOFING & INTERIORS, BUILT TO ENDURE"
+- ✓ Changed hero subtitle to "Precision-Built. Personally Yours."
+- ✓ Updated contact form subtitle to "Let's Build Your Vision"
+- ✓ Updated copyright year to 2025
+
+### Documentation Enhancement
+- ✓ Created comprehensive README.md with Firebase hosting deployment instructions
+- ✓ Added step-by-step deployment guide for Firebase Hosting
+- ✓ Included environment variable configuration
+- ✓ Added continuous deployment setup with GitHub Actions
+- ✓ Documented project structure and key features
