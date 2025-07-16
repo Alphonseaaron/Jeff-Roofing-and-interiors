@@ -117,10 +117,7 @@ export function Login() {
               onClick={() => setLocation("/")}
               variant="ghost"
               size="icon"
-              className="transition-colors duration-200"
-              style={{ color: '#A1A1A1' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
+              className="text-gray-400 hover:text-white transition-colors duration-200"
             >
               <ArrowLeft size={20} />
             </Button>
@@ -128,40 +125,30 @@ export function Login() {
               onClick={toggleTheme}
               variant="ghost"
               size="icon"
-              className="transition-colors duration-200"
-              style={{ color: '#A1A1A1' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
+              className="text-gray-400 hover:text-white transition-colors duration-200"
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </Button>
           </div>
         </div>
 
-        <Card style={{ backgroundColor: '#111111', borderColor: '#333333' }}>
+        <Card className="bg-gray-900 border-gray-700">
           <CardHeader className="text-center">
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList 
-                className="grid w-full grid-cols-2 mb-6" 
-                style={{ backgroundColor: '#222222', borderColor: '#333333' }}
+                className="grid w-full grid-cols-2 mb-6 bg-gray-800 border-gray-600" 
               >
                 <TabsTrigger 
                   value="login" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=inactive]:text-gray-400"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                  }}
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=active]:bg-gray-700 data-[state=inactive]:text-gray-400"
                 >
                   LOGIN
                 </TabsTrigger>
                 <TabsTrigger 
                   value="signup" 
-                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=inactive]:text-gray-400"
-                  style={{ 
-                    backgroundColor: 'transparent',
-                  }}
+                  className="text-sm font-medium uppercase tracking-wider transition-colors duration-200 data-[state=active]:text-white data-[state=active]:bg-gray-700 data-[state=inactive]:text-gray-400"
                 >
                   REGISTER
                 </TabsTrigger>
