@@ -109,8 +109,9 @@ export function Login() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center items-center mb-6">
-            <div className="text-3xl sm:text-4xl mr-2 sm:mr-4 font-bold" style={{ color: '#3399FF' }}>J</div>
-            <h1 className="text-lg sm:text-2xl font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</h1>
+            <div className="text-3xl sm:text-4xl mr-2 sm:mr-4 font-bold" 
+              style={{ color: '#3399FF' }}>J</div>
+            <h1 className="text-lg sm:text-2xl font-bold uppercase tracking-wider text white">JEFF ROOFING & INTERIORS</h1>
           </div>
           <div className="flex justify-between items-center mb-4">
             <Button
