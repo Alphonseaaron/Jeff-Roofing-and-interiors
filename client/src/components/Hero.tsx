@@ -35,7 +35,7 @@ export function Hero() {
           className={`text-xl md:text-2xl mb-12 font-medium animate-fade-up-delay ${subtitleVisible ? 'visible' : ''}`}
           style={{ color: '#A1A1A1' }}
         >
-          PRECISION ENGINEERING FOR MODERN CONSTRUCTION
+          Precision-Built. Personally Yours.
         </p>
         <div 
           ref={buttonRef}

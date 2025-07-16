@@ -81,7 +81,7 @@ export function ContactForm() {
             INITIATE PROJECT
           </h2>
           <p className="text-xl font-medium" style={{ color: '#A1A1A1' }}>
-            ADVANCED CONSULTATION REQUEST SYSTEM
+            Let's Build Your Vision
           </p>
         </div>
         
