@@ -26,39 +26,42 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-card border-b border-border text-foreground sticky top-0 z-40 backdrop-blur-md">
+    <nav className="sticky top-0 z-40 backdrop-blur-md" style={{ backgroundColor: '#000000', borderBottom: '1px solid #222222' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <div className="text-primary text-2xl mr-3 font-bold">J</div>
-            <span className="text-xl font-bold uppercase tracking-wide">Jeff Roofing & Interiors</span>
+            <div className="text-2xl mr-3 font-bold" style={{ color: '#3399FF' }}>J</div>
+            <span className="text-xl font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             <button
               onClick={() => scrollToSection("services")}
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
+              className="font-medium uppercase tracking-wider transition-colors duration-200"
+              style={{ color: '#A1A1A1' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
             >
-              Services
+              SERVICES
             </button>
             <button
               onClick={() => scrollToSection("gallery")}
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
+              className="font-medium uppercase tracking-wider transition-colors duration-200"
+              style={{ color: '#A1A1A1' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
             >
-              Gallery
-            </button>
-            <button
-              onClick={() => scrollToSection("testimonials")}
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
-            >
-              Testimonials
+              GALLERY
             </button>
             <button
               onClick={() => scrollToSection("contact")}
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
+              className="font-medium uppercase tracking-wider transition-colors duration-200"
+              style={{ color: '#A1A1A1' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
             >
-              Contact
+              CONTACT
             </button>
           </div>
 

@@ -67,11 +67,15 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-background">
+    <section id="contact" className="py-20" style={{ backgroundColor: '#111111' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 uppercase tracking-wide">Get Started Today</h2>
-          <p className="text-lg text-muted-foreground font-medium">Request a free consultation and we'll create your account</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-wider text-white">
+            INITIATE PROJECT
+          </h2>
+          <p className="text-xl font-medium" style={{ color: '#A1A1A1' }}>
+            ADVANCED CONSULTATION REQUEST SYSTEM
+          </p>
         </div>
         
         <div className="max-w-2xl mx-auto">
