@@ -78,9 +78,9 @@ export function Admin() {
         
         <div className="flex-1 overflow-auto">
           {/* Header */}
-          <div className="p-4" style={{ backgroundColor: '#000000', borderBottom: '1px solid #333333' }}>
-            <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold uppercase tracking-wider text-white">
+          <div className="p-2 sm:p-4" style={{ backgroundColor: '#000000', borderBottom: '1px solid #333333' }}>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h1 className="text-lg sm:text-2xl font-bold uppercase tracking-wider text-white">
                 {activeTab === "dashboard" && "DASHBOARD OVERVIEW"}
                 {activeTab === "projects" && "PROJECT MANAGEMENT"}
                 {activeTab === "team" && "TEAM MANAGEMENT"}
@@ -89,7 +89,7 @@ export function Admin() {
                 {activeTab === "messages" && "MESSAGES"}
                 {activeTab === "notifications" && "NOTIFICATIONS"}
               </h1>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <Button 
                   variant="ghost" 
                   size="icon" 
@@ -106,12 +106,12 @@ export function Admin() {
                       {user?.displayName?.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-sm font-medium text-white">{user?.displayName}</span>
+                  <span className="hidden sm:inline text-sm font-medium text-white">{user?.displayName}</span>
                   <Button 
                     variant="outline" 
                     size="sm" 
                     onClick={handleLogout}
-                    className="border-white text-white hover:bg-white hover:text-black"
+                    className="border-white text-white hover:bg-white hover:text-black text-xs sm:text-sm"
                   >
                     LOGOUT
                   </Button>

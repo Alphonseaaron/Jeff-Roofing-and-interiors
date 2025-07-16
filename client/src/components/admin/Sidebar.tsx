@@ -26,19 +26,19 @@ export function Sidebar({ activeTab, onTabChange, userPermissions }: SidebarProp
     ? allMenuItems 
     : allMenuItems.filter(item => userPermissions?.includes(item.id));
   return (
-    <div className="w-64 flex-shrink-0 h-screen" style={{ backgroundColor: '#000000', borderRight: '1px solid #333333' }}>
-      <div className="p-4">
-        <div className="flex items-center mb-8">
-          <div className="text-2xl mr-3 font-bold" style={{ color: '#3399FF' }}>J</div>
-          <span className="text-xl font-bold uppercase tracking-wider text-white">JEFF ROOFING ADMIN</span>
+    <div className="w-48 sm:w-64 flex-shrink-0 h-screen" style={{ backgroundColor: '#000000', borderRight: '1px solid #333333' }}>
+      <div className="p-2 sm:p-4">
+        <div className="flex flex-col sm:flex-row items-center mb-6 sm:mb-8">
+          <div className="text-xl sm:text-2xl mr-0 sm:mr-3 font-bold" style={{ color: '#3399FF' }}>J</div>
+          <span className="text-sm sm:text-xl font-bold uppercase tracking-wider text-white text-center sm:text-left">JEFF ROOFING ADMIN</span>
         </div>
         
-        <nav className="space-y-2">
+        <nav className="space-y-1 sm:space-y-2">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className="w-full flex items-center py-2 px-4 rounded transition-colors font-medium uppercase tracking-wider"
+              className="w-full flex items-center py-2 px-2 sm:px-4 rounded transition-colors font-medium uppercase tracking-wider text-xs sm:text-sm"
               style={{
                 backgroundColor: activeTab === item.id ? '#3399FF' : 'transparent',
                 color: activeTab === item.id ? '#FFFFFF' : '#FFFFFF'
@@ -54,8 +54,8 @@ export function Sidebar({ activeTab, onTabChange, userPermissions }: SidebarProp
                 }
               }}
             >
-              <item.icon size={20} className="mr-3" />
-              {item.label}
+              <item.icon size={16} className="mr-2 sm:mr-3 flex-shrink-0" />
+              <span className="hidden sm:inline">{item.label}</span>
             </button>
           ))}
         </nav>

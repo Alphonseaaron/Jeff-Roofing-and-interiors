@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { signIn, signUp, getUserProfile } from "@/lib/auth";
 import { useLocation } from "wouter";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, ArrowLeft } from "lucide-react";
 import { USER_ROLES } from "@shared/schema";
 
 export function Login() {
@@ -105,14 +105,25 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#000000' }}>
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#000000' }}>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center items-center mb-6">
-            <div className="text-4xl mr-4 font-bold" style={{ color: '#3399FF' }}>J</div>
-            <h1 className="text-2xl font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</h1>
+            <div className="text-3xl sm:text-4xl mr-2 sm:mr-4 font-bold" style={{ color: '#3399FF' }}>J</div>
+            <h1 className="text-lg sm:text-2xl font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</h1>
           </div>
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <Button
+              onClick={() => setLocation("/")}
+              variant="ghost"
+              size="icon"
+              className="transition-colors duration-200"
+              style={{ color: '#A1A1A1' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
+            >
+              <ArrowLeft size={20} />
+            </Button>
             <Button
               onClick={toggleTheme}
               variant="ghost"
@@ -167,12 +178,7 @@ export function Login() {
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       required
-                      className="mt-2"
-                      style={{ 
-                        backgroundColor: '#222222', 
-                        borderColor: '#333333', 
-                        color: '#FFFFFF'
-                      }}
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -183,12 +189,7 @@ export function Login() {
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       required
-                      className="mt-2"
-                      style={{ 
-                        backgroundColor: '#222222', 
-                        borderColor: '#333333', 
-                        color: '#FFFFFF'
-                      }}
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <Button 
@@ -226,12 +227,7 @@ export function Login() {
                       value={signupData.name}
                       onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
                       required
-                      className="mt-2"
-                      style={{ 
-                        backgroundColor: '#222222', 
-                        borderColor: '#333333', 
-                        color: '#FFFFFF'
-                      }}
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -243,12 +239,7 @@ export function Login() {
                       value={signupData.email}
                       onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
                       required
-                      className="mt-2"
-                      style={{ 
-                        backgroundColor: '#222222', 
-                        borderColor: '#333333', 
-                        color: '#FFFFFF'
-                      }}
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -259,12 +250,7 @@ export function Login() {
                       value={signupData.password}
                       onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                       required
-                      className="mt-2"
-                      style={{ 
-                        backgroundColor: '#222222', 
-                        borderColor: '#333333', 
-                        color: '#FFFFFF'
-                      }}
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -275,12 +261,7 @@ export function Login() {
                       value={signupData.confirmPassword}
                       onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
                       required
-                      className="mt-2"
-                      style={{ 
-                        backgroundColor: '#222222', 
-                        borderColor: '#333333', 
-                        color: '#FFFFFF'
-                      }}
+                      className="mt-2 bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <Button 
