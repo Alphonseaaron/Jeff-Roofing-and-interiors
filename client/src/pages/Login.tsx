@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
-import { signIn, signUp } from "@/lib/auth";
+import { signIn, signUp, getUserProfile } from "@/lib/auth";
 import { useLocation } from "wouter";
 import { Sun, Moon } from "lucide-react";
 import { USER_ROLES } from "@shared/schema";
@@ -34,12 +34,24 @@ export function Login() {
     setIsLoading(true);
 
     try {
-      await signIn(loginData.email, loginData.password);
+      const user = await signIn(loginData.email, loginData.password);
+      const userProfile = await getUserProfile(user.uid);
+      
       toast({
         title: "Access Granted",
         description: "Welcome to the system",
       });
-      setLocation("/");
+      
+      // Role-based redirect
+      if (userProfile?.role === USER_ROLES.ADMIN) {
+        setLocation("/admin");
+      } else if (userProfile?.role === USER_ROLES.TEAM_LEADER) {
+        setLocation("/admin"); // Team leaders also use admin dashboard
+      } else if (userProfile?.role === USER_ROLES.CLIENT) {
+        setLocation("/client");
+      } else {
+        setLocation("/"); // Default to landing page
+      }
     } catch (error: any) {
       toast({
         title: "Access Denied",
@@ -65,12 +77,22 @@ export function Login() {
     setIsLoading(true);
 
     try {
-      await signUp(signupData.email, signupData.password, signupData.name, USER_ROLES.CLIENT);
+      const user = await signUp(signupData.email, signupData.password, signupData.name, USER_ROLES.CLIENT);
+      const userProfile = await getUserProfile(user.uid);
+      
       toast({
         title: "Account Created",
         description: "Welcome to Jeff Roofing & Interiors",
       });
-      setLocation("/");
+      
+      // Role-based redirect (new accounts default to client)
+      if (userProfile?.role === USER_ROLES.ADMIN) {
+        setLocation("/admin");
+      } else if (userProfile?.role === USER_ROLES.TEAM_LEADER) {
+        setLocation("/admin");
+      } else {
+        setLocation("/client"); // Default for new client accounts
+      }
     } catch (error: any) {
       toast({
         title: "Registration Failed",

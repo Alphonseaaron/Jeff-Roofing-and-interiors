@@ -68,17 +68,13 @@ export const getProjects = async (filters?: {
   teamLeadId?: string;
   status?: string;
 }) => {
-  let q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+  let q = query(collection(db, 'projects'));
   
   if (filters?.clientId) {
     q = query(q, where('clientId', '==', filters.clientId));
-  }
-  
-  if (filters?.teamLeadId) {
+  } else if (filters?.teamLeadId) {
     q = query(q, where('teamLeadId', '==', filters.teamLeadId));
-  }
-  
-  if (filters?.status) {
+  } else if (filters?.status) {
     q = query(q, where('status', '==', filters.status));
   }
   
@@ -104,17 +100,13 @@ export const subscribeToProjects = (
   callback: (projects: Project[]) => void,
   filters?: { clientId?: string; teamLeadId?: string; status?: string }
 ) => {
-  let q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+  let q = query(collection(db, 'projects'));
   
   if (filters?.clientId) {
     q = query(q, where('clientId', '==', filters.clientId));
-  }
-  
-  if (filters?.teamLeadId) {
+  } else if (filters?.teamLeadId) {
     q = query(q, where('teamLeadId', '==', filters.teamLeadId));
-  }
-  
-  if (filters?.status) {
+  } else if (filters?.status) {
     q = query(q, where('status', '==', filters.status));
   }
   
