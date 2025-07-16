@@ -26,37 +26,37 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-primary-blue dark:bg-primary-blue text-white sticky top-0 z-40 backdrop-blur-md">
+    <nav className="bg-card border-b border-border text-foreground sticky top-0 z-40 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <div className="text-secondary-orange text-2xl mr-3 font-bold">J</div>
-            <span className="text-xl font-bold">Jeff Roofing & Interiors</span>
+            <div className="text-primary text-2xl mr-3 font-bold">J</div>
+            <span className="text-xl font-bold uppercase tracking-wide">Jeff Roofing & Interiors</span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             <button
               onClick={() => scrollToSection("services")}
-              className="hover:text-secondary-orange transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
             >
               Services
             </button>
             <button
               onClick={() => scrollToSection("gallery")}
-              className="hover:text-secondary-orange transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
             >
               Gallery
             </button>
             <button
               onClick={() => scrollToSection("testimonials")}
-              className="hover:text-secondary-orange transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
             >
               Testimonials
             </button>
             <button
               onClick={() => scrollToSection("contact")}
-              className="hover:text-secondary-orange transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium uppercase tracking-wide"
             >
               Contact
             </button>
@@ -68,7 +68,7 @@ export function Navigation() {
               onClick={toggleTheme}
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-primary-blue-hover"
+              className="text-muted-foreground hover:text-primary hover:bg-accent"
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </Button>

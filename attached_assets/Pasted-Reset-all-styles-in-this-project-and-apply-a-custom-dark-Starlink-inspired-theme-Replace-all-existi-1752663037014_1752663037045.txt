@@ -1,0 +1,62 @@
+Reset all styles in this project and apply a custom dark Starlink-inspired theme. Replace all existing colors, borders, and text styles using the following specifications:
+
+🔧 GENERAL:
+- Use a full CSS reset (set margin/padding to 0, box-sizing to border-box)
+- Set `body` background to `#000000` (pure black)
+- Set global font-family to `'Inter', sans-serif` or `Space Grotesk`
+- Apply `color: #FFFFFF` for primary text and `#A1A1A1` for muted text
+- Remove any gradients, shadows, or bright colors — stick to clean, minimal flat styling
+
+🎨 COLOR PALETTE:
+- Background: `#000000` (main), `#0A0A0A` (secondary panels)
+- Card/panel background: `#111111`
+- Borders: `#222222`
+- Primary text: `#FFFFFF`
+- Muted text: `#A1A1A1`
+- Links/CTAs: `#3399FF`
+- Link/CTA hover: `#5FB8FF`
+- Error: `#FF3B3B`
+- Success: `#1ABF89`
+
+📝 TEXT STYLES:
+- Titles (h1-h3): uppercase, letter-spacing: 1px, font-weight: 700
+- Subtitles: font-weight: 500, muted color `#A1A1A1`
+- Body text: font-weight: 400, color `#FFFFFF`
+- Remove any serif fonts or decorative styles
+
+🧱 SECTIONS/BACKGROUNDS:
+- All sections should use either `#000000`, `#0A0A0A`, or `#111111` backgrounds
+- Cards and info blocks should use `#111111` with `#222222` border
+
+🔘 BUTTONS:
+- Default button:
+  - Background: `#3399FF`
+  - Text color: `#FFFFFF`
+  - Border: none
+  - Border-radius: 6px
+  - Padding: 0.75rem 1.5rem
+  - Font-weight: 600
+  - Cursor: pointer
+  - Hover background: `#5FB8FF`
+- Secondary button:
+  - Background: transparent
+  - Border: 2px solid `#3399FF`
+  - Text color: `#3399FF`
+  - On hover: background `#3399FF`, text `#000000`
+
+🔍 FORMS / INPUTS:
+- Inputs and textareas:
+  - Background: `#111111`
+  - Border: 1px solid `#222222`
+  - Text color: `#FFFFFF`
+  - Placeholder color: `#A1A1A1`
+  - On focus: border-color `#3399FF`, no glow
+
+🚀 INTERACTION:
+- All hover/focus states should use smooth transitions (`200ms ease-in-out`)
+- Avoid box shadows — use border color changes or subtle brightness instead
+
+🧼 CLEANUP:
+- Remove any existing color variables
+- Delete or override any pastel, light, or gradient-based styles
+- Ensure consistency across mobile and desktop

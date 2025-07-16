@@ -5,45 +5,49 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+      fontFamily: {
+        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        'space': ['Space Grotesk', 'Inter', 'sans-serif'],
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        // Starlink Theme Colors
+        background: {
+          DEFAULT: "#000000",
+          secondary: "#0A0A0A",
+        },
+        foreground: "#FFFFFF",
         card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
+          DEFAULT: "#111111",
+          foreground: "#FFFFFF",
         },
-        popover: {
-          DEFAULT: "var(--popover)",
-          foreground: "var(--popover-foreground)",
-        },
+        border: "#222222",
+        input: "#111111",
         primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
+          DEFAULT: "#3399FF",
+          foreground: "#FFFFFF",
+          hover: "#5FB8FF",
         },
         secondary: {
-          DEFAULT: "var(--secondary)",
-          foreground: "var(--secondary-foreground)",
+          DEFAULT: "#A1A1A1",
+          foreground: "#000000",
         },
         muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          DEFAULT: "#A1A1A1",
+          foreground: "#A1A1A1",
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "#111111",
+          foreground: "#FFFFFF",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+          DEFAULT: "#FF3B3B",
+          foreground: "#FFFFFF",
         },
-        border: "var(--border)",
-        input: "var(--input)",
-        ring: "var(--ring)",
+        success: {
+          DEFAULT: "#1ABF89",
+          foreground: "#FFFFFF",
+        },
+        ring: "#3399FF",
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",

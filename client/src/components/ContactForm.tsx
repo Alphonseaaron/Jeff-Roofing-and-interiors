@@ -67,18 +67,18 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-surface-light dark:bg-surface-dark">
+    <section id="contact" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-primary dark:text-primary mb-4">Get Started Today</h2>
-          <p className="text-xl text-secondary dark:text-secondary">Request a free consultation and we'll create your account</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 uppercase tracking-wide">Get Started Today</h2>
+          <p className="text-lg text-muted-foreground font-medium">Request a free consultation and we'll create your account</p>
         </div>
         
         <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="bg-white dark:bg-surface-medium p-8 rounded-xl shadow-sm dark:shadow-black/20">
+          <form onSubmit={handleSubmit} className="bg-card border border-border p-8 rounded-lg">
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <Label htmlFor="name" className="text-primary dark:text-primary font-medium mb-2">Full Name</Label>
+                <Label htmlFor="name" className="text-foreground font-semibold mb-2 uppercase tracking-wide">Full Name</Label>
                 <Input
                   id="name"
                   type="text"
