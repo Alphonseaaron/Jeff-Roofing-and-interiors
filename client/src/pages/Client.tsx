@@ -29,31 +29,36 @@ export function Client() {
 
   return (
     <ProtectedRoute requiredRole="client">
-      <div className="min-h-screen bg-surface-light dark:bg-surface-dark">
+      <div className="min-h-screen" style={{ backgroundColor: '#000000' }}>
         {/* Header */}
-        <div className="bg-white dark:bg-surface-medium border-b border-gray-200 dark:border-border">
+        <div style={{ backgroundColor: '#000000', borderBottom: '1px solid #333333' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
-                <div className="text-primary-blue text-2xl mr-3 font-bold">J</div>
-                <span className="text-xl font-bold text-primary dark:text-primary">Jeff Roofing & Interiors Client Portal</span>
+                <div className="text-2xl mr-3 font-bold" style={{ color: '#3399FF' }}>J</div>
+                <span className="text-xl font-bold uppercase tracking-wider text-white">JEFF ROOFING CLIENT PORTAL</span>
               </div>
               <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="icon" className="relative">
+                <Button variant="ghost" size="icon" className="relative text-white hover:bg-gray-800">
                   <Bell size={20} />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" style={{ backgroundColor: '#3399FF' }}>
                     2
                   </span>
                 </Button>
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3399FF' }}>
                     <span className="text-white text-sm font-semibold">
                       {user?.displayName?.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-sm font-medium dark:text-primary">{user?.displayName}</span>
-                  <Button variant="outline" size="sm" onClick={handleLogout}>
-                    Logout
+                  <span className="text-sm font-medium text-white">{user?.displayName}</span>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleLogout}
+                    className="border-white text-white hover:bg-white hover:text-black"
+                  >
+                    LOGOUT
                   </Button>
                 </div>
               </div>

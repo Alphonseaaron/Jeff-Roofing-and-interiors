@@ -39,27 +39,27 @@ export function Navigation() {
             <button
               onClick={() => scrollToSection("services")}
               className="font-medium uppercase tracking-wider transition-colors duration-200"
-              style={{ color: '#A1A1A1' }}
+              style={{ color: '#FFFFFF' }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#FFFFFF'}
             >
               SERVICES
             </button>
             <button
               onClick={() => scrollToSection("gallery")}
               className="font-medium uppercase tracking-wider transition-colors duration-200"
-              style={{ color: '#A1A1A1' }}
+              style={{ color: '#FFFFFF' }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#FFFFFF'}
             >
               GALLERY
             </button>
             <button
               onClick={() => scrollToSection("contact")}
               className="font-medium uppercase tracking-wider transition-colors duration-200"
-              style={{ color: '#A1A1A1' }}
+              style={{ color: '#FFFFFF' }}
               onMouseEnter={(e) => e.currentTarget.style.color = '#3399FF'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#A1A1A1'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#FFFFFF'}
             >
               CONTACT
             </button>
@@ -76,27 +76,36 @@ export function Navigation() {
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </Button>
             {user ? (
-              <>
-                <Button
-                  onClick={() => setLocation(user.role === "admin" ? "/admin" : "/client")}
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-primary-blue"
-                >
-                  Dashboard
-                </Button>
-                <Button
-                  onClick={handleLogout}
-                  className="bg-secondary-orange hover:bg-secondary-orange-hover"
-                >
-                  Logout
-                </Button>
-              </>
+              <Button
+                onClick={handleLogout}
+                className="btn-primary"
+                style={{ backgroundColor: '#3399FF', color: '#FFFFFF' }}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.backgroundColor = '#FFFFFF'; 
+                  e.currentTarget.style.color = '#000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3399FF';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }}
+              >
+                LOGOUT
+              </Button>
             ) : (
               <Button
                 onClick={() => setLocation("/login")}
-                className="bg-secondary-orange hover:bg-secondary-orange-hover"
+                className="btn-primary"
+                style={{ backgroundColor: '#3399FF', color: '#FFFFFF' }}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.backgroundColor = '#FFFFFF'; 
+                  e.currentTarget.style.color = '#000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3399FF';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }}
               >
-                Login
+                LOGIN
               </Button>
             )}
           </div>
