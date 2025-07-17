@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Jeff Roofing & Interiors</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3399FF',
+                        dark: '#000000',
+                        'dark-lighter': '#111111',
+                        'dark-border': '#222222',
+                        'gray-text': '#A1A1A1'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        window.firebase = { auth, db, signOut, onAuthStateChanged, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy };
+    </script>
+</head>
+<body class="bg-dark text-white font-inter">
+    <!-- Header -->
+    <header class="bg-dark border-b border-dark-border">
+        <div class="flex justify-between items-center px-6 py-4">
+            <div class="flex items-center">
+                <div class="text-2xl mr-3 font-bold text-primary">J</div>
+                <span class="text-xl font-bold uppercase tracking-wider text-white">ADMIN DASHBOARD</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span id="userEmail" class="text-gray-text text-sm"></span>
+                <button onclick="handleLogout()" class="px-4 py-2 bg-red-600 text-white text-sm font-medium uppercase tracking-wider rounded-lg hover:bg-red-700 transition-colors">
+                    LOGOUT
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-lighter border-r border-dark-border">
+            <nav class="p-4 space-y-2">
+                <button onclick="showSection('dashboard')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    📊 DASHBOARD
+                </button>
+                <button onclick="showSection('projects')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    🏗️ PROJECTS
+                </button>
+                <button onclick="showSection('clients')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    👥 CLIENTS
+                </button>
+                <button onclick="showSection('messages')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    💬 MESSAGES
+                </button>
+                <button onclick="showSection('payments')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    💰 PAYMENTS
+                </button>
+                <button onclick="window.location.href='/'" class="w-full text-left px-4 py-3 text-gray-text hover:bg-dark hover:text-white rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    🏠 BACK TO SITE
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">DASHBOARD OVERVIEW</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Stats Cards -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TOTAL PROJECTS</h3>
+                        <div class="text-3xl font-bold text-white" id="totalProjects">0</div>
+                    </div>
+                    
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">ACTIVE PROJECTS</h3>
+                        <div class="text-3xl font-bold text-primary" id="activeProjects">0</div>
+                    </div>
+                    
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TOTAL CLIENTS</h3>
+                        <div class="text-3xl font-bold text-white" id="totalClients">0</div>
+                    </div>
+                    
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">PENDING PAYMENTS</h3>
+                        <div class="text-3xl font-bold text-yellow-500" id="pendingPayments">0</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                    <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">RECENT ACTIVITY</h2>
+                    <div id="recentActivity" class="space-y-3">
+                        <div class="text-gray-text text-sm">Loading recent activity...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div id="projects" class="section hidden p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold uppercase tracking-wider text-white">PROJECTS</h1>
+                    <button onclick="showCreateProjectModal()" class="px-6 py-3 bg-primary text-white font-medium uppercase tracking-wider rounded-lg hover:bg-blue-500 transition-colors">
+                        + CREATE PROJECT
+                    </button>
+                </div>
+                
+                <div class="bg-dark-lighter rounded-lg border border-dark-border overflow-hidden">
+                    <div class="p-4 border-b border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white">ALL PROJECTS</h2>
+                    </div>
+                    <div id="projectsList" class="divide-y divide-dark-border">
+                        <div class="p-4 text-gray-text text-sm">Loading projects...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients Section -->
+            <div id="clients" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">CLIENTS</h1>
+                
+                <div class="bg-dark-lighter rounded-lg border border-dark-border overflow-hidden">
+                    <div class="p-4 border-b border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white">ALL CLIENTS</h2>
+                    </div>
+                    <div id="clientsList" class="divide-y divide-dark-border">
+                        <div class="p-4 text-gray-text text-sm">Loading clients...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">MESSAGES</h1>
+                
+                <div class="bg-dark-lighter rounded-lg border border-dark-border overflow-hidden">
+                    <div class="p-4 border-b border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white">CONTACT MESSAGES</h2>
+                    </div>
+                    <div id="messagesList" class="divide-y divide-dark-border">
+                        <div class="p-4 text-gray-text text-sm">Loading messages...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments Section -->
+            <div id="payments" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">PAYMENTS</h1>
+                
+                <div class="bg-dark-lighter rounded-lg border border-dark-border overflow-hidden">
+                    <div class="p-4 border-b border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white">PAYMENT TRACKING</h2>
+                    </div>
+                    <div id="paymentsList" class="divide-y divide-dark-border">
+                        <div class="p-4 text-gray-text text-sm">Loading payments...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Project Modal -->
+    <div id="createProjectModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-dark border border-dark-border rounded-lg max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold uppercase tracking-wider text-white">CREATE PROJECT</h2>
+                <button onclick="closeCreateProjectModal()" class="text-gray-text hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="createProjectForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">PROJECT NAME</label>
+                    <input type="text" name="name" required class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">CLIENT EMAIL</label>
+                    <input type="email" name="clientEmail" required class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">PROJECT TYPE</label>
+                    <select name="type" required class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Select Type</option>
+                        <option value="roofing">Roofing</option>
+                        <option value="interior">Interior Design</option>
+                        <option value="both">Roofing + Interior</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">BUDGET</label>
+                    <input type="number" name="budget" class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">DESCRIPTION</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                </div>
+                
+                <button type="submit" class="w-full px-4 py-3 bg-primary text-white font-semibold uppercase tracking-wider rounded-lg hover:bg-blue-500 transition-colors duration-200">
+                    CREATE PROJECT
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentUser = null;
+        let projects = [];
+        let clients = [];
+        let messages = [];
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-dark', 'text-primary');
+            });
+            event.target.classList.add('bg-dark', 'text-primary');
+            
+            // Load section data
+            loadSectionData(sectionName);
+        }
+
+        // Modal functions
+        function showCreateProjectModal() {
+            document.getElementById('createProjectModal').classList.remove('hidden');
+        }
+
+        function closeCreateProjectModal() {
+            document.getElementById('createProjectModal').classList.add('hidden');
+        }
+
+        // Auth functions
+        async function handleLogout() {
+            try {
+                await window.firebase.signOut(window.firebase.auth);
+                window.location.href = '/';
+            } catch (error) {
+                alert('Logout failed: ' + error.message);
+            }
+        }
+
+        // Data loading functions
+        async function loadSectionData(section) {
+            switch(section) {
+                case 'dashboard':
+                    await loadDashboardData();
+                    break;
+                case 'projects':
+                    await loadProjects();
+                    break;
+                case 'clients':
+                    await loadClients();
+                    break;
+                case 'messages':
+                    await loadMessages();
+                    break;
+                case 'payments':
+                    await loadPayments();
+                    break;
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load stats
+                const projectsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'projects'));
+                const clientsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'contacts'));
+                
+                const totalProjects = projectsSnapshot.size;
+                const activeProjects = projectsSnapshot.docs.filter(doc => doc.data().status === 'active').length;
+                const totalClients = clientsSnapshot.size;
+                
+                document.getElementById('totalProjects').textContent = totalProjects;
+                document.getElementById('activeProjects').textContent = activeProjects;
+                document.getElementById('totalClients').textContent = totalClients;
+                
+                // Load recent activity
+                const recentActivity = document.getElementById('recentActivity');
+                recentActivity.innerHTML = `
+                    <div class="text-sm text-gray-text">• New contact form submission</div>
+                    <div class="text-sm text-gray-text">• Project status updated</div>
+                    <div class="text-sm text-gray-text">• Payment received</div>
+                `;
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        async function loadProjects() {
+            try {
+                const projectsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'projects'));
+                const projectsList = document.getElementById('projectsList');
+                
+                if (projectsSnapshot.empty) {
+                    projectsList.innerHTML = '<div class="p-4 text-gray-text text-sm">No projects found.</div>';
+                    return;
+                }
+                
+                projectsList.innerHTML = '';
+                projectsSnapshot.forEach(doc => {
+                    const project = doc.data();
+                    const projectElement = document.createElement('div');
+                    projectElement.className = 'p-4 hover:bg-dark transition-colors';
+                    projectElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-white">${project.name || 'Untitled Project'}</h3>
+                                <p class="text-sm text-gray-text">${project.type || 'No type specified'}</p>
+                                <p class="text-sm text-gray-text">Client: ${project.clientEmail || 'No client assigned'}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-block px-2 py-1 text-xs font-medium rounded ${project.status === 'active' ? 'bg-green-600 text-white' : 'bg-yellow-600 text-white'}">${project.status || 'pending'}</span>
+                                <p class="text-sm text-gray-text mt-1">$${project.budget || '0'}</p>
+                            </div>
+                        </div>
+                    `;
+                    projectsList.appendChild(projectElement);
+                });
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('projectsList').innerHTML = '<div class="p-4 text-red-400 text-sm">Error loading projects.</div>';
+            }
+        }
+
+        async function loadClients() {
+            try {
+                const clientsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'contacts'));
+                const clientsList = document.getElementById('clientsList');
+                
+                if (clientsSnapshot.empty) {
+                    clientsList.innerHTML = '<div class="p-4 text-gray-text text-sm">No clients found.</div>';
+                    return;
+                }
+                
+                clientsList.innerHTML = '';
+                clientsSnapshot.forEach(doc => {
+                    const client = doc.data();
+                    const clientElement = document.createElement('div');
+                    clientElement.className = 'p-4 hover:bg-dark transition-colors';
+                    clientElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-white">${client.name || 'No name'}</h3>
+                                <p class="text-sm text-gray-text">${client.email || 'No email'}</p>
+                                <p class="text-sm text-gray-text">${client.phone || 'No phone'}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-gray-text">${client.projectType || 'No project type'}</p>
+                                <p class="text-xs text-gray-text">${client.timestamp ? new Date(client.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</p>
+                            </div>
+                        </div>
+                    `;
+                    clientsList.appendChild(clientElement);
+                });
+            } catch (error) {
+                console.error('Error loading clients:', error);
+                document.getElementById('clientsList').innerHTML = '<div class="p-4 text-red-400 text-sm">Error loading clients.</div>';
+            }
+        }
+
+        async function loadMessages() {
+            try {
+                const messagesSnapshot = await window.firebase.getDocs(
+                    window.firebase.query(
+                        window.firebase.collection(window.firebase.db, 'contacts'),
+                        window.firebase.orderBy('timestamp', 'desc')
+                    )
+                );
+                const messagesList = document.getElementById('messagesList');
+                
+                if (messagesSnapshot.empty) {
+                    messagesList.innerHTML = '<div class="p-4 text-gray-text text-sm">No messages found.</div>';
+                    return;
+                }
+                
+                messagesList.innerHTML = '';
+                messagesSnapshot.forEach(doc => {
+                    const message = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'p-4 hover:bg-dark transition-colors';
+                    messageElement.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-medium text-white">${message.name || 'Anonymous'}</h3>
+                                <span class="text-xs text-gray-text">${message.timestamp ? new Date(message.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span>
+                            </div>
+                            <p class="text-sm text-gray-text mb-2">${message.email || 'No email'} • ${message.phone || 'No phone'}</p>
+                            <p class="text-sm text-white">${message.message || 'No message'}</p>
+                            <p class="text-xs text-gray-text mt-2">Project Type: ${message.projectType || 'Not specified'}</p>
+                        </div>
+                    `;
+                    messagesList.appendChild(messageElement);
+                });
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                document.getElementById('messagesList').innerHTML = '<div class="p-4 text-red-400 text-sm">Error loading messages.</div>';
+            }
+        }
+
+        async function loadPayments() {
+            const paymentsList = document.getElementById('paymentsList');
+            paymentsList.innerHTML = '<div class="p-4 text-gray-text text-sm">Payment tracking feature coming soon.</div>';
+        }
+
+        // Form handlers
+        document.getElementById('createProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const projectData = {
+                    name: formData.get('name'),
+                    clientEmail: formData.get('clientEmail'),
+                    type: formData.get('type'),
+                    budget: formData.get('budget'),
+                    description: formData.get('description'),
+                    status: 'active',
+                    createdAt: new Date(),
+                    createdBy: currentUser.email
+                };
+                
+                await window.firebase.addDoc(window.firebase.collection(window.firebase.db, 'projects'), projectData);
+                alert('Project created successfully!');
+                closeCreateProjectModal();
+                e.target.reset();
+                loadProjects();
+            } catch (error) {
+                alert('Error creating project: ' + error.message);
+            }
+        });
+
+        // Auth state management
+        if (window.firebase && window.firebase.auth) {
+            window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('userEmail').textContent = user.email;
+                    loadDashboardData();
+                } else {
+                    window.location.href = '/';
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('createProjectModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeCreateProjectModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('dashboard');
+        });
+    </script>
+</body>
+</html>

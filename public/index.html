@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeff Roofing & Interiors - Professional Construction Management</title>
+    <meta name="description" content="Professional construction management platform for Jeff Roofing & Interiors. Real-time project tracking, transparent communication, and expert craftsmanship for residential and commercial projects.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta property="og:title" content="Jeff Roofing & Interiors - Professional Construction Management">
+    <meta property="og:description" content="Expert construction services with real-time project tracking and transparent communication.">
+    <meta property="og:type" content="website">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3399FF',
+                        dark: '#000000',
+                        'dark-lighter': '#111111',
+                        'dark-border': '#222222',
+                        'gray-text': '#A1A1A1'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        
+        // Firebase configuration - replace with your config
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Make Firebase available globally
+        window.firebase = { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot };
+    </script>
+</head>
+<body class="bg-dark text-white font-inter">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-40 bg-dark border-b border-dark-border backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl mr-3 font-bold text-primary">J</div>
+                    <span class="text-xl font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('services')" class="nav-link font-medium uppercase tracking-wider text-white hover:text-primary transition-colors duration-200">
+                        SERVICES
+                    </button>
+                    <button onclick="scrollToSection('gallery')" class="nav-link font-medium uppercase tracking-wider text-white hover:text-primary transition-colors duration-200">
+                        GALLERY
+                    </button>
+                    <button onclick="scrollToSection('contact')" class="nav-link font-medium uppercase tracking-wider text-white hover:text-primary transition-colors duration-200">
+                        CONTACT
+                    </button>
+                </div>
+                
+                <!-- Auth Buttons -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button id="loginBtn" onclick="openLoginModal()" class="px-4 py-2 bg-primary text-white font-medium uppercase tracking-wider rounded-lg hover:bg-blue-500 transition-colors duration-200">
+                        LOGIN
+                    </button>
+                    <button id="logoutBtn" onclick="handleLogout()" class="px-4 py-2 bg-red-600 text-white font-medium uppercase tracking-wider rounded-lg hover:bg-red-700 transition-colors duration-200 hidden">
+                        LOGOUT
+                    </button>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-white">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-dark border-t border-dark-border">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="scrollToSection('services')" class="block w-full text-left px-3 py-2 text-white hover:text-primary font-medium uppercase tracking-wider">
+                    SERVICES
+                </button>
+                <button onclick="scrollToSection('gallery')" class="block w-full text-left px-3 py-2 text-white hover:text-primary font-medium uppercase tracking-wider">
+                    GALLERY
+                </button>
+                <button onclick="scrollToSection('contact')" class="block w-full text-left px-3 py-2 text-white hover:text-primary font-medium uppercase tracking-wider">
+                    CONTACT
+                </button>
+                <button onclick="openLoginModal()" class="block w-full text-left px-3 py-2 text-primary font-medium uppercase tracking-wider">
+                    LOGIN
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('/attached_assets/5_1752664761848.jpg');"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight uppercase tracking-wider text-white">
+                ADVANCED ROOFING SYSTEMS
+            </h1>
+            <p class="text-lg md:text-xl lg:text-2xl mb-12 font-medium text-gray-text">
+                Precision-Built. Personally Yours.
+            </p>
+            <button onclick="scrollToSection('contact')" class="px-8 py-3 md:px-12 md:py-4 text-base md:text-lg font-semibold uppercase tracking-wider bg-primary text-white rounded-lg hover:bg-blue-500 transform hover:-translate-y-1 transition-all duration-300">
+                START PROJECT
+            </button>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 md:py-24 bg-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider text-white mb-6">
+                    OUR SERVICES
+                </h2>
+                <p class="text-lg md:text-xl text-gray-text max-w-3xl mx-auto">
+                    Professional construction services with precision engineering and unmatched quality
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="bg-dark-lighter p-8 rounded-lg hover:bg-opacity-80 transition-all duration-300">
+                    <div class="text-primary text-4xl mb-4">🏠</div>
+                    <h3 class="text-xl font-bold uppercase tracking-wider text-white mb-4">ROOFING SYSTEMS</h3>
+                    <p class="text-gray-text">Advanced roofing solutions with premium materials and expert installation</p>
+                </div>
+                
+                <!-- Service Card 2 -->
+                <div class="bg-dark-lighter p-8 rounded-lg hover:bg-opacity-80 transition-all duration-300">
+                    <div class="text-primary text-4xl mb-4">🏗️</div>
+                    <h3 class="text-xl font-bold uppercase tracking-wider text-white mb-4">INTERIOR DESIGN</h3>
+                    <p class="text-gray-text">Custom interior solutions that blend functionality with modern aesthetics</p>
+                </div>
+                
+                <!-- Service Card 3 -->
+                <div class="bg-dark-lighter p-8 rounded-lg hover:bg-opacity-80 transition-all duration-300">
+                    <div class="text-primary text-4xl mb-4">🔧</div>
+                    <h3 class="text-xl font-bold uppercase tracking-wider text-white mb-4">PROJECT MANAGEMENT</h3>
+                    <p class="text-gray-text">End-to-end project coordination with real-time tracking and updates</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Section -->
+    <section class="py-16 md:py-24 bg-dark-lighter">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider text-white mb-6">
+                    WHY CHOOSE US
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-primary text-5xl mb-4">⚡</div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-white mb-2">FAST DELIVERY</h3>
+                    <p class="text-gray-text text-sm">Efficient project completion without compromising quality</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-primary text-5xl mb-4">✅</div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-white mb-2">GUARANTEED QUALITY</h3>
+                    <p class="text-gray-text text-sm">Premium materials and expert craftsmanship guaranteed</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-primary text-5xl mb-4">📞</div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-white mb-2">24/7 SUPPORT</h3>
+                    <p class="text-gray-text text-sm">Round-the-clock customer support and maintenance</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-primary text-5xl mb-4">💰</div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-white mb-2">FAIR PRICING</h3>
+                    <p class="text-gray-text text-sm">Transparent pricing with no hidden costs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Gallery -->
+    <section id="gallery" class="py-16 md:py-24 bg-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider text-white mb-6">
+                    PROJECT GALLERY
+                </h2>
+                <p class="text-lg md:text-xl text-gray-text">Showcase of our completed construction projects</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery items will be dynamically loaded here -->
+                <div class="aspect-video bg-dark-lighter rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="/attached_assets/1.1_1752664761830.jpg" alt="Project 1" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark-lighter rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="/attached_assets/1.2_1752664761845.jpg" alt="Project 2" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark-lighter rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="/attached_assets/1.3_1752664761845.jpg" alt="Project 3" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark-lighter rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="/attached_assets/4.2_1752664761847.jpg" alt="Project 4" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark-lighter rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="/attached_assets/7.1_1752664761848.jpg" alt="Project 5" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark-lighter rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="/attached_assets/9_1752664761849.jpg" alt="Project 6" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section id="contact" class="py-16 md:py-24 bg-dark-lighter">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider text-white mb-6">
+                    CONTACT US
+                </h2>
+                <p class="text-lg md:text-xl text-gray-text">Let's Build Your Vision</p>
+            </div>
+            
+            <form id="contactForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">NAME</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">EMAIL</label>
+                        <input type="email" name="email" required class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">PHONE</label>
+                    <input type="tel" name="phone" class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">PROJECT TYPE</label>
+                    <select name="projectType" class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Select Project Type</option>
+                        <option value="roofing">Roofing</option>
+                        <option value="interior">Interior Design</option>
+                        <option value="both">Roofing + Interior</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">MESSAGE</label>
+                    <textarea name="message" rows="5" required class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                </div>
+                
+                <button type="submit" class="w-full px-8 py-4 bg-primary text-white font-semibold uppercase tracking-wider rounded-lg hover:bg-blue-500 transition-colors duration-200">
+                    SEND MESSAGE
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark border-t border-dark-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-2xl mr-3 font-bold text-primary">J</div>
+                        <span class="text-lg font-bold uppercase tracking-wider text-white">JEFF ROOFING & INTERIORS</span>
+                    </div>
+                    <p class="text-gray-text mb-4">BESPOKE ROOFING & INTERIORS, BUILT TO ENDURE</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-white mb-4">CONTACT INFO</h3>
+                    <div class="space-y-2 text-gray-text">
+                        <p>📞 +254721752466</p>
+                        <p>📞 +254733386713</p>
+                        <p>📧 info@jeffroofing.co.ke</p>
+                        <p>📍 Nairobi, Kenya</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-white mb-4">FOLLOW US</h3>
+                    <div class="space-y-2">
+                        <a href="#" class="block text-gray-text hover:text-primary transition-colors">TikTok: @engineerjeff</a>
+                        <a href="#" class="block text-gray-text hover:text-primary transition-colors">Facebook: @jeffroofinginteriors</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-dark-border mt-8 pt-8 text-center">
+                <p class="text-gray-text">&copy; 2025 Jeff Roofing & Interiors. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-dark border border-dark-border rounded-lg max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold uppercase tracking-wider text-white">LOGIN</h2>
+                <button onclick="closeLoginModal()" class="text-gray-text hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">EMAIL</label>
+                    <input type="email" name="email" required class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">PASSWORD</label>
+                    <input type="password" name="password" required class="w-full px-4 py-3 bg-dark-lighter border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                
+                <button type="submit" class="w-full px-4 py-3 bg-primary text-white font-semibold uppercase tracking-wider rounded-lg hover:bg-blue-500 transition-colors duration-200">
+                    LOGIN
+                </button>
+            </form>
+            
+            <div class="mt-4 text-center">
+                <p class="text-gray-text text-sm">Need an account? Contact us to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentUser = null;
+
+        // Navigation functions
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        // Auth functions
+        async function handleLogin(email, password) {
+            try {
+                const userCredential = await window.firebase.signInWithEmailAndPassword(window.firebase.auth, email, password);
+                currentUser = userCredential.user;
+                updateAuthUI();
+                closeLoginModal();
+                
+                // Redirect based on user role (you'll need to implement role checking)
+                // For now, redirect to admin dashboard
+                window.location.href = '/admin.html';
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                await window.firebase.signOut(window.firebase.auth);
+                currentUser = null;
+                updateAuthUI();
+                window.location.href = '/';
+            } catch (error) {
+                alert('Logout failed: ' + error.message);
+            }
+        }
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (currentUser) {
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                loginBtn.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+        }
+
+        // Form handlers
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            await handleLogin(email, password);
+        });
+
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                // Add contact to Firestore and create user account
+                const contactData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    projectType: formData.get('projectType'),
+                    message: formData.get('message'),
+                    timestamp: new Date(),
+                    role: 'client'
+                };
+                
+                await window.firebase.addDoc(window.firebase.collection(window.firebase.db, 'contacts'), contactData);
+                alert('Thank you for your message! We will contact you soon.');
+                e.target.reset();
+            } catch (error) {
+                alert('Error sending message: ' + error.message);
+            }
+        });
+
+        // Auth state listener
+        if (window.firebase && window.firebase.auth) {
+            window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
+                currentUser = user;
+                updateAuthUI();
+            });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeLoginModal();
+            }
+        });
+    </script>
+</body>
+</html>

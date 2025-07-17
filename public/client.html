@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal - Jeff Roofing & Interiors</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3399FF',
+                        dark: '#000000',
+                        'dark-lighter': '#111111',
+                        'dark-border': '#222222',
+                        'gray-text': '#A1A1A1'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, collection, getDocs, doc, onSnapshot, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        window.firebase = { auth, db, signOut, onAuthStateChanged, collection, getDocs, doc, onSnapshot, query, where, orderBy };
+    </script>
+</head>
+<body class="bg-dark text-white font-inter">
+    <!-- Header -->
+    <header class="bg-dark border-b border-dark-border">
+        <div class="flex justify-between items-center px-6 py-4">
+            <div class="flex items-center">
+                <div class="text-2xl mr-3 font-bold text-primary">J</div>
+                <span class="text-xl font-bold uppercase tracking-wider text-white">CLIENT PORTAL</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span id="clientName" class="text-gray-text text-sm"></span>
+                <button onclick="handleLogout()" class="px-4 py-2 bg-red-600 text-white text-sm font-medium uppercase tracking-wider rounded-lg hover:bg-red-700 transition-colors">
+                    LOGOUT
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-lighter border-r border-dark-border">
+            <nav class="p-4 space-y-2">
+                <button onclick="showSection('overview')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    📊 OVERVIEW
+                </button>
+                <button onclick="showSection('projects')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    🏗️ MY PROJECTS
+                </button>
+                <button onclick="showSection('progress')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    📈 PROGRESS
+                </button>
+                <button onclick="showSection('photos')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    📸 PHOTOS
+                </button>
+                <button onclick="showSection('payments')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    💰 PAYMENTS
+                </button>
+                <button onclick="showSection('messages')" class="nav-item w-full text-left px-4 py-3 text-white hover:bg-dark hover:text-primary rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    💬 MESSAGES
+                </button>
+                <button onclick="window.location.href='/'" class="w-full text-left px-4 py-3 text-gray-text hover:bg-dark hover:text-white rounded-lg transition-colors font-medium uppercase tracking-wider">
+                    🏠 BACK TO SITE
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Overview Section -->
+            <div id="overview" class="section p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">PROJECT OVERVIEW</h1>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Current Project Card -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">CURRENT PROJECT</h2>
+                        <div id="currentProject" class="space-y-3">
+                            <div class="text-gray-text text-sm">Loading project information...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Stats -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">PROJECT STATUS</h2>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-text text-sm uppercase tracking-wider">Overall Progress</span>
+                                <span class="text-primary font-bold" id="overallProgress">0%</span>
+                            </div>
+                            <div class="w-full bg-dark-border rounded-full h-2">
+                                <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-primary" id="daysActive">0</div>
+                                    <div class="text-xs text-gray-text uppercase tracking-wider">Days Active</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-green-500" id="milestonesCompleted">0</div>
+                                    <div class="text-xs text-gray-text uppercase tracking-wider">Milestones</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Updates -->
+                <div class="mt-8 bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                    <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">RECENT UPDATES</h2>
+                    <div id="recentUpdates" class="space-y-3">
+                        <div class="text-gray-text text-sm">Loading recent updates...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div id="projects" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">MY PROJECTS</h1>
+                
+                <div class="space-y-6" id="projectsList">
+                    <div class="text-gray-text text-sm">Loading your projects...</div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progress" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">PROJECT PROGRESS</h1>
+                
+                <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                    <h2 class="text-lg font-bold uppercase tracking-wider text-white mb-6">PROJECT TIMELINE</h2>
+                    <div id="timeline" class="space-y-6">
+                        <div class="text-gray-text text-sm">Loading project timeline...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photos Section -->
+            <div id="photos" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">PROJECT PHOTOS</h1>
+                
+                <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                    <h2 class="text-lg font-bold uppercase tracking-wider text-white mb-6">PROGRESS GALLERY</h2>
+                    <div id="photoGallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="text-gray-text text-sm">Loading project photos...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments Section -->
+            <div id="payments" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">PAYMENT STATUS</h1>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Payment Summary -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white mb-4">PAYMENT SUMMARY</h2>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-text text-sm">Total Project Cost</span>
+                                <span class="text-white font-bold" id="totalCost">$0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-text text-sm">Amount Paid</span>
+                                <span class="text-green-500 font-bold" id="amountPaid">$0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-text text-sm">Remaining Balance</span>
+                                <span class="text-yellow-500 font-bold" id="remainingBalance">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment History -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white mb-4">PAYMENT HISTORY</h2>
+                        <div id="paymentHistory" class="space-y-3">
+                            <div class="text-gray-text text-sm">Loading payment history...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages" class="section hidden p-6">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-white mb-8">MESSAGES</h1>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Message Thread -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white mb-4">PROJECT COMMUNICATION</h2>
+                        <div id="messageThread" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="text-gray-text text-sm">Loading messages...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Send Message -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-lg font-bold uppercase tracking-wider text-white mb-4">SEND MESSAGE</h2>
+                        <form id="messageForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">Subject</label>
+                                <input type="text" name="subject" required class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-white mb-2 uppercase tracking-wider">Message</label>
+                                <textarea name="message" rows="4" required class="w-full px-4 py-3 bg-dark border border-dark-border rounded-lg text-white placeholder-gray-text focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full px-4 py-3 bg-primary text-white font-semibold uppercase tracking-wider rounded-lg hover:bg-blue-500 transition-colors duration-200">
+                                SEND MESSAGE
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentUser = null;
+        let userProjects = [];
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-dark', 'text-primary');
+            });
+            event.target.classList.add('bg-dark', 'text-primary');
+            
+            // Load section data
+            loadSectionData(sectionName);
+        }
+
+        // Auth functions
+        async function handleLogout() {
+            try {
+                await window.firebase.signOut(window.firebase.auth);
+                window.location.href = '/';
+            } catch (error) {
+                alert('Logout failed: ' + error.message);
+            }
+        }
+
+        // Data loading functions
+        async function loadSectionData(section) {
+            switch(section) {
+                case 'overview':
+                    await loadOverview();
+                    break;
+                case 'projects':
+                    await loadProjects();
+                    break;
+                case 'progress':
+                    await loadProgress();
+                    break;
+                case 'photos':
+                    await loadPhotos();
+                    break;
+                case 'payments':
+                    await loadPayments();
+                    break;
+                case 'messages':
+                    await loadMessages();
+                    break;
+            }
+        }
+
+        async function loadOverview() {
+            try {
+                // Load current project
+                const currentProject = document.getElementById('currentProject');
+                currentProject.innerHTML = `
+                    <div class="space-y-2">
+                        <h3 class="font-medium text-white">Modern Roofing System</h3>
+                        <p class="text-sm text-gray-text">Type: Roofing + Interior</p>
+                        <p class="text-sm text-gray-text">Status: <span class="text-green-500">In Progress</span></p>
+                        <p class="text-sm text-gray-text">Started: January 15, 2025</p>
+                    </div>
+                `;
+
+                // Update progress
+                const progress = 65;
+                document.getElementById('overallProgress').textContent = progress + '%';
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('daysActive').textContent = '12';
+                document.getElementById('milestonesCompleted').textContent = '3/5';
+
+                // Load recent updates
+                const recentUpdates = document.getElementById('recentUpdates');
+                recentUpdates.innerHTML = `
+                    <div class="border-l-2 border-primary pl-4">
+                        <div class="text-sm text-white">Roofing installation 80% complete</div>
+                        <div class="text-xs text-gray-text">2 days ago</div>
+                    </div>
+                    <div class="border-l-2 border-yellow-500 pl-4">
+                        <div class="text-sm text-white">Interior design phase started</div>
+                        <div class="text-xs text-gray-text">5 days ago</div>
+                    </div>
+                    <div class="border-l-2 border-green-500 pl-4">
+                        <div class="text-sm text-white">Foundation work completed</div>
+                        <div class="text-xs text-gray-text">1 week ago</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading overview:', error);
+            }
+        }
+
+        async function loadProjects() {
+            try {
+                const projectsList = document.getElementById('projectsList');
+                projectsList.innerHTML = `
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Modern Roofing System</h3>
+                                <p class="text-sm text-gray-text">Roofing + Interior Design</p>
+                            </div>
+                            <span class="inline-block px-3 py-1 text-xs font-medium rounded bg-green-600 text-white">ACTIVE</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-text">Started:</span>
+                                <span class="text-white ml-2">Jan 15, 2025</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-text">Budget:</span>
+                                <span class="text-white ml-2">$25,000</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-text">Progress:</span>
+                                <span class="text-primary ml-2">65%</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-text">Est. Completion:</span>
+                                <span class="text-white ml-2">Feb 28, 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+
+        async function loadProgress() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = `
+                <div class="relative">
+                    <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-dark-border"></div>
+                    
+                    <div class="relative flex items-start space-x-4 pb-6">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">✓</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-white">Project Planning & Design</h3>
+                            <p class="text-sm text-gray-text">Completed Jan 15, 2025</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex items-start space-x-4 pb-6">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">✓</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-white">Foundation Work</h3>
+                            <p class="text-sm text-gray-text">Completed Jan 22, 2025</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex items-start space-x-4 pb-6">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">◐</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-white">Roofing Installation</h3>
+                            <p class="text-sm text-gray-text">In Progress - 80% Complete</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex items-start space-x-4 pb-6">
+                        <div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">○</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-text">Interior Design</h3>
+                            <p class="text-sm text-gray-text">Scheduled for Feb 1, 2025</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">○</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-text">Final Inspection</h3>
+                            <p class="text-sm text-gray-text">Scheduled for Feb 28, 2025</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadPhotos() {
+            const photoGallery = document.getElementById('photoGallery');
+            photoGallery.innerHTML = `
+                <div class="aspect-video bg-dark rounded-lg overflow-hidden">
+                    <img src="/attached_assets/1.1_1752664761830.jpg" alt="Foundation Progress" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark rounded-lg overflow-hidden">
+                    <img src="/attached_assets/1.2_1752664761845.jpg" alt="Roofing Progress" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-video bg-dark rounded-lg overflow-hidden">
+                    <img src="/attached_assets/4.2_1752664761847.jpg" alt="Current Status" class="w-full h-full object-cover">
+                </div>
+            `;
+        }
+
+        async function loadPayments() {
+            document.getElementById('totalCost').textContent = '$25,000';
+            document.getElementById('amountPaid').textContent = '$15,000';
+            document.getElementById('remainingBalance').textContent = '$10,000';
+
+            const paymentHistory = document.getElementById('paymentHistory');
+            paymentHistory.innerHTML = `
+                <div class="border-l-2 border-green-500 pl-4">
+                    <div class="text-sm text-white">Payment Received - $10,000</div>
+                    <div class="text-xs text-gray-text">Jan 15, 2025 - Initial Payment</div>
+                </div>
+                <div class="border-l-2 border-green-500 pl-4">
+                    <div class="text-sm text-white">Payment Received - $5,000</div>
+                    <div class="text-xs text-gray-text">Jan 22, 2025 - Milestone Payment</div>
+                </div>
+                <div class="border-l-2 border-yellow-500 pl-4">
+                    <div class="text-sm text-white">Payment Due - $10,000</div>
+                    <div class="text-xs text-gray-text">Feb 1, 2025 - Final Payment</div>
+                </div>
+            `;
+        }
+
+        async function loadMessages() {
+            const messageThread = document.getElementById('messageThread');
+            messageThread.innerHTML = `
+                <div class="bg-dark p-4 rounded-lg">
+                    <div class="text-xs text-gray-text mb-2">Admin - Jan 25, 2025</div>
+                    <div class="text-sm text-white">Roofing installation is progressing well. Weather has been favorable and we're ahead of schedule.</div>
+                </div>
+                <div class="bg-dark-border p-4 rounded-lg">
+                    <div class="text-xs text-gray-text mb-2">You - Jan 24, 2025</div>
+                    <div class="text-sm text-white">Thank you for the update. When can we expect the interior design phase to begin?</div>
+                </div>
+                <div class="bg-dark p-4 rounded-lg">
+                    <div class="text-xs text-gray-text mb-2">Admin - Jan 20, 2025</div>
+                    <div class="text-sm text-white">Foundation work completed successfully. Starting roofing installation next week.</div>
+                </div>
+            `;
+        }
+
+        // Form handler
+        document.getElementById('messageForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Message sent successfully!');
+            e.target.reset();
+        });
+
+        // Auth state management
+        if (window.firebase && window.firebase.auth) {
+            window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('clientName').textContent = user.email;
+                    loadOverview();
+                } else {
+                    window.location.href = '/';
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('overview');
+        });
+    </script>
+</body>
+</html>
