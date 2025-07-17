@@ -98,31 +98,81 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Stats Cards -->
                     <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
-                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TOTAL PROJECTS</h3>
-                        <div class="text-3xl font-bold text-white" id="totalProjects">0</div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TOTAL PROJECTS</h3>
+                                <div class="text-3xl font-bold text-white" id="totalProjects">0</div>
+                            </div>
+                            <div class="w-12 h-12 bg-dark border border-dark-border rounded-lg flex items-center justify-center">
+                                <span class="text-primary text-xl">📊</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xs text-gray-text" id="totalProjectsChange">From all time</span>
+                        </div>
                     </div>
                     
                     <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
-                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">ACTIVE PROJECTS</h3>
-                        <div class="text-3xl font-bold text-primary" id="activeProjects">0</div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">ACTIVE PROJECTS</h3>
+                                <div class="text-3xl font-bold text-primary" id="activeProjects">0</div>
+                            </div>
+                            <div class="w-12 h-12 bg-dark border border-dark-border rounded-lg flex items-center justify-center">
+                                <span class="text-primary text-xl">🏗️</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xs text-gray-text" id="activeProjectsChange">Currently in progress</span>
+                        </div>
                     </div>
                     
                     <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
-                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TOTAL CLIENTS</h3>
-                        <div class="text-3xl font-bold text-white" id="totalClients">0</div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TEAM MEMBERS</h3>
+                                <div class="text-3xl font-bold text-white" id="teamMembers">0</div>
+                            </div>
+                            <div class="w-12 h-12 bg-dark border border-dark-border rounded-lg flex items-center justify-center">
+                                <span class="text-primary text-xl">👥</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xs text-gray-text" id="teamMembersChange">Active team members</span>
+                        </div>
                     </div>
                     
                     <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
-                        <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">PENDING PAYMENTS</h3>
-                        <div class="text-3xl font-bold text-yellow-500" id="pendingPayments">0</div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-medium uppercase tracking-wider text-gray-text mb-2">TOTAL REVENUE</h3>
+                                <div class="text-3xl font-bold text-green-500" id="totalRevenue">$0</div>
+                            </div>
+                            <div class="w-12 h-12 bg-dark border border-dark-border rounded-lg flex items-center justify-center">
+                                <span class="text-primary text-xl">💰</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xs text-gray-text" id="totalRevenueChange">From active projects</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
-                <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
-                    <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">RECENT ACTIVITY</h2>
-                    <div id="recentActivity" class="space-y-3">
-                        <div class="text-gray-text text-sm">Loading recent activity...</div>
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <!-- Recent Projects -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">RECENT PROJECTS</h2>
+                        <div id="recentProjects" class="space-y-4">
+                            <div class="text-gray-text text-sm">Loading recent projects...</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-dark-lighter p-6 rounded-lg border border-dark-border">
+                        <h2 class="text-xl font-bold uppercase tracking-wider text-white mb-4">RECENT ACTIVITY</h2>
+                        <div id="recentActivity" class="space-y-3">
+                            <div class="text-gray-text text-sm">Loading recent activity...</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -309,27 +359,122 @@
 
         async function loadDashboardData() {
             try {
-                // Load stats
+                // Load projects and users data
                 const projectsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'projects'));
-                const clientsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'contacts'));
+                const usersSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'users'));
+                const contactsSnapshot = await window.firebase.getDocs(window.firebase.collection(window.firebase.db, 'contacts'));
                 
-                const totalProjects = projectsSnapshot.size;
-                const activeProjects = projectsSnapshot.docs.filter(doc => doc.data().status === 'active').length;
-                const totalClients = clientsSnapshot.size;
+                const projects = projectsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
+                // Calculate stats
+                const totalProjects = projects.length;
+                const activeProjects = projects.filter(p => p.status === 'in_progress' || p.status === 'active').length;
+                const teamMembers = users.filter(u => u.role === 'admin' || u.role === 'team_leader').length;
+                const totalRevenue = projects.reduce((sum, p) => sum + (parseFloat(p.budget) || 0), 0);
+                
+                // Update dashboard stats
                 document.getElementById('totalProjects').textContent = totalProjects;
                 document.getElementById('activeProjects').textContent = activeProjects;
-                document.getElementById('totalClients').textContent = totalClients;
+                document.getElementById('teamMembers').textContent = teamMembers;
+                document.getElementById('totalRevenue').textContent = `$${totalRevenue.toLocaleString()}`;
                 
-                // Load recent activity
-                const recentActivity = document.getElementById('recentActivity');
-                recentActivity.innerHTML = `
-                    <div class="text-sm text-gray-text">• New contact form submission</div>
-                    <div class="text-sm text-gray-text">• Project status updated</div>
-                    <div class="text-sm text-gray-text">• Payment received</div>
-                `;
+                // Update change indicators
+                document.getElementById('totalProjectsChange').textContent = `${totalProjects} total projects`;
+                document.getElementById('activeProjectsChange').textContent = `${activeProjects} currently active`;
+                document.getElementById('teamMembersChange').textContent = `${teamMembers} active members`;
+                document.getElementById('totalRevenueChange').textContent = 'From all projects';
+                
+                // Update recent projects
+                updateRecentProjects(projects);
+                
+                // Update recent activity
+                updateRecentActivity(projects, contactsSnapshot);
+                
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
+                // Show fallback content
+                document.getElementById('totalProjects').textContent = '0';
+                document.getElementById('activeProjects').textContent = '0';
+                document.getElementById('teamMembers').textContent = '0';
+                document.getElementById('totalRevenue').textContent = '$0';
+            }
+        }
+
+        function updateRecentProjects(projects) {
+            const projectsContainer = document.getElementById('recentProjects');
+            const recentProjects = projects.slice(0, 5);
+            
+            if (recentProjects.length === 0) {
+                projectsContainer.innerHTML = '<div class="text-gray-text text-sm">No projects found</div>';
+                return;
+            }
+            
+            projectsContainer.innerHTML = recentProjects.map(project => `
+                <div class="flex items-center space-x-4">
+                    <div class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-white font-medium truncate">${project.name || project.title || 'Untitled Project'}</p>
+                        <p class="text-gray-text text-sm">${project.clientEmail || 'No client assigned'}</p>
+                    </div>
+                    <span class="px-2 py-1 bg-primary text-white text-xs rounded uppercase tracking-wider">${project.status || 'pending'}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateRecentActivity(projects, contactsSnapshot) {
+            const activityContainer = document.getElementById('recentActivity');
+            const activities = [];
+            
+            // Add project activities
+            projects.slice(0, 3).forEach(project => {
+                activities.push({
+                    text: `Project "${project.name || project.title || 'Untitled'}" updated`,
+                    time: project.createdAt || new Date(),
+                    type: 'project'
+                });
+            });
+            
+            // Add contact activities
+            const contacts = contactsSnapshot.docs.slice(0, 2);
+            contacts.forEach(doc => {
+                const contact = doc.data();
+                activities.push({
+                    text: `New contact from ${contact.name || 'Unknown'}`,
+                    time: contact.timestamp || new Date(),
+                    type: 'contact'
+                });
+            });
+            
+            if (activities.length === 0) {
+                activityContainer.innerHTML = '<div class="text-gray-text text-sm">No recent activity</div>';
+                return;
+            }
+            
+            activityContainer.innerHTML = activities.map(activity => `
+                <div class="flex items-center space-x-3">
+                    <div class="w-2 h-2 rounded-full bg-gray-text flex-shrink-0"></div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-white text-sm">${activity.text}</p>
+                        <p class="text-gray-text text-xs">${formatDate(activity.time)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateInput) {
+            try {
+                let date;
+                if (dateInput && dateInput.seconds) {
+                    date = new Date(dateInput.seconds * 1000);
+                } else if (dateInput) {
+                    date = new Date(dateInput);
+                } else {
+                    date = new Date();
+                }
+                return date.toLocaleDateString();
+            } catch (error) {
+                return 'Unknown date';
             }
         }
 
